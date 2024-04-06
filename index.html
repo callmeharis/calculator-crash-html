@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Finance Calculator</title>
-    <!-- Include CSS files -->
-    <link rel="stylesheet" href="Hourly-to-Salary.css">
-    <link rel="stylesheet" href="Salary-to-Hourly.css">
-    <link rel="stylesheet" href="Time-and-a-Half.css">
-    <link rel="stylesheet" href="Overtime.css">
     <link rel="stylesheet" href="style.css">
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baskervville&family=Libre+Baskerville&family=Nunito+Sans:opsz,wght@6..12,700&family=Playfair+Display&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&family=Righteous&family=Roboto:ital,wght@1,300&family=Rubik:ital,wght@1,300&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -26,43 +24,156 @@
         </ul>
     </div>
 
-    <!-- Container for Calculator Components -->
-    <div id="calculator-container"></div>
+    <div class="calculator-main">
+        <div class="calculator-calculation-parent">
+            <div class="calculator-calculation-card">
+                <h1>Hourly Calculator</h1>
+                <div class="grid-container">
+                    <h2>Currency</h2>
+                    <div class="currency-selector">
+                        <button onclick="handleCurrencyChange('$')" class="selected">$</button>
+                        <button onclick="handleCurrencyChange('€')" class="selected">€</button>
+                        <button onclick="handleCurrencyChange('£')" class="selected">£</button>
+                        <button onclick="handleCurrencyChange('₹')" class="selected">₹</button>
+                        <button onclick="handleCurrencyChange('¥')" class="selected">¥</button>
+                    </div>
+                    <div class="input-group">
+                        <label for="hourly-wage">Hourly pay</label>
+                        <div class="hourly-pay">
+                            <span id="selected-currency">$</span>
+                            <input type="range" id="hourly-wage-slider" min="0" max="100" value="0"
+                                class="w-full bg-black-500">
+                            <span id="hourly-wage" class="ml-3">0</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="hours-per-week">Work hours per week</label>
+                        <input type="text" id="hours-per-week"
+                            class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="input-group">
+                        <label for="weeks-per-year">Work weeks per year</label>
+                        <input type="text" id="weeks-per-year"
+                            class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="time-and-a-half-info">
+                <h1 class="info-heading">Hourly Calculator</h1>
+                <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent
+                    hourly
+                    wage
+                    based on your annual salary. It considers total hours worked per week, potential bonuses,
+                    and
+                    factors in vacation time into its calculations. You can always easily edit the calculator to
+                    suit
+                    your specific needs, such as including different taxation factors, and any other additional
+                    variables.</p>
+                <h2 class="font-bold text-xl mb-5">FORMULA</h2>
+                <p class="info-paragraph">Basic Salary = Gross Salary – Total Allowances (DA + HRA + Medical
+                    Insurance +
+                    Other Allowances) or Basic salary = CTC x Percentage</p>
+                <h2 class="font-bold text-xl mb-5">WORKS BEST FOR</h2>
+                <p class="info-paragraph">The hourly wage calculator is perfect for personal use, accounting
+                    services
+                    and companies.</p>
+            </div>
+        </div>
 
-    <!-- Include JavaScript files -->
-    <script src="Hourly-to-Salary.js"></script>
-    <script src="Salary-to-Hourly.js"></script>
-    <script src="Time-and-a-Half.js"></script>
-    <script src="Overtime.js"></script>
-
-    <script>
-        // Function to show Hourly to Salary Calculator component
-        function showHourlyToSalary() {
-            $('#calculator-container').empty(); // Clear previous content
-            ReactDOM.render(<HourlyToSalaryCalculator />, document.getElementById('calculator-container'));
-        }
-
-        // Function to show Salary to Hourly Calculator component
-        function showSalaryToHourly() {
-            $('#calculator-container').empty(); // Clear previous content
-            ReactDOM.render(<SalaryToHourlyCalculator />, document.getElementById('calculator-container'));
-        }
-
-        // Function to show Time and a Half Calculator component
-        function showTimeAndHalf() {
-            $('#calculator-container').empty(); // Clear previous content
-            ReactDOM.render(<TimeAndHalfCalculator />, document.getElementById('calculator-container'));
-        }
-
-        // Function to show Overtime Calculator component
-        function showOvertime() {
-            $('#calculator-container').empty(); // Clear previous content
-            ReactDOM.render(<OvertimeCalculator />, document.getElementById('calculator-container'));
-        }
-
-        // By default, show the Hourly to Salary Calculator
-        showHourlyToSalary();
-    </script>
+        <!-- <div class="popup" id="popup">
+                <div class="popup-content">
+                    <p>Please fill in all required fields with valid numeric values.</p>
+                    <button class="popup-button" id="close-popup">Close</button>
+                </div>
+            </div> -->
+    </div>
 </body>
+<script>
+    // Wait for DOM content to load before executing scripts
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to handle currency change
+        function handleCurrencyChange(currency) {
+            var selectedCurrencyElement = document.getElementById('selected-currency');
+            selectedCurrencyElement.textContent = currency;
+
+            // Display median salaries if currency is USD or EUR
+            if (currency === '$') {
+                displayMedianSalary('US', 57200);
+            } else if (currency === '€') {
+                displayMedianSalary('UK', 33000);
+            }
+
+            // Trigger the change event
+            selectedCurrencyElement.dispatchEvent(new Event('change'));
+        }
+
+        // Function to display median salary information
+        function displayMedianSalary(country, medianSalary) {
+            document.getElementById('median-salary').innerHTML =
+                '<h2 class="text-xl font-semibold">Median Salary</h2>' +
+                '<p class="mt-2">Median salary in ' + country + ': $' + medianSalary.toFixed(2) + '</p>';
+        }
+
+        // Function to calculate salary
+        function calculateRates() {
+            // Get input values
+            var hourlyWage = parseFloat(document.getElementById('hourly-wage').textContent);
+            var hoursPerWeek = parseFloat(document.getElementById('hours-per-week').value);
+            var weeksPerYear = parseFloat(document.getElementById('weeks-per-year').value);
+
+            // Check if any input is empty or not a number
+            if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear)) {
+                // Show popup
+                document.getElementById('popup').style.display = 'flex';
+            } else {
+                // Calculate salary
+                var annualSalary = hourlyWage * hoursPerWeek * weeksPerYear;
+                var monthlySalary = annualSalary / 12;
+                var weeklyPay = annualSalary / 52;
+
+                // Display calculated salary
+                document.getElementById('calculated-salary').innerHTML =
+                    '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
+                    '<p class="mt-2">Annual Salary: $' + annualSalary.toFixed(2) + '</p>' +
+                    '<p>Monthly Salary: $' + monthlySalary.toFixed(2) + '</p>' +
+                    '<p>Weekly Pay: $' + weeklyPay.toFixed(2) + '</p>';
+            }
+        }
+
+        // Close popup
+        document.getElementById('close-popup').addEventListener('click', function () {
+            document.getElementById('popup').style.display = 'none';
+        });
+
+        // Handle currency change event
+        document.getElementById('selected-currency').addEventListener('change', function () {
+            var selectedCurrency = this.textContent;
+            // Define exchange rates manually
+            const exchangeRates = {
+                '$': 1,  // USD is the base currency
+                '€': 0.85, // Euro to USD exchange rate
+                '£': 0.75, // British Pound to USD exchange rate
+                '₹': 74.21, // Indian Rupee to USD exchange rate
+                '¥': 114.41 // Japanese Yen to USD exchange rate
+            };
+
+            // Update exchange rate based on the selected currency
+            setExchangeRate(exchangeRates[selectedCurrency]);
+        });
+
+        // Update hourly wage slider value
+        document.getElementById('hourly-wage-slider').addEventListener('input', function () {
+            document.getElementById('hourly-wage').textContent = this.value;
+        });
+
+        // Event listener for calculate button
+        document.querySelector('.calculate-button').addEventListener('click', calculateRates);
+    });
+</script>
 
 </html>
