@@ -1,50 +1,54 @@
+// Function to calculate hourly rate
+function calculateHourlyRate(salary, hoursPerWeek, weeksPerYear) {
+    return (salary / (hoursPerWeek * weeksPerYear)).toFixed(2);
+}
+
+// Function to calculate hourly rate from monthly salary
+function calculateHourlyRateFromMonthlySalary(monthlySalary, hoursPerWeek, weeksPerYear) {
+    return ((monthlySalary * 12) / (hoursPerWeek * weeksPerYear)).toFixed(2);
+}
 
 $(document).ready(function () {
-    // Set default currency to $
-    var selectedCurrency = '$';
-
-    // Currency button click handler
-    $('#currency-buttons button').click(function () {
-        selectedCurrency = $(this).data('currency');
-        $('#currency-buttons button').removeClass('bg-black text-white').addClass('bg-gray-200');
-        $(this).removeClass('bg-gray-200').addClass('bg-black text-white');
-    });
-
-    // Calculation button click handler
-    $('#calculate-button').click(function () {
-        // Fetch input values
+    // Event listener for Calculate button
+    $('.calculate-button').click(function () {
+        // Get input values
+        var currency = $('.currency-button.active').text();
         var salary = parseFloat($('#salary').val());
-        var hoursPerWeek = parseFloat($('#hours-per-week').val());
-        var weeksPerYear = parseFloat($('#weeks-per-year').val());
+        var hoursPerWeek = parseFloat($('#hoursPerWeek').val());
+        var weeksPerYear = parseFloat($('#weeksPerYear').val());
+        var payPeriod = $('.pay-choice.active').text();
 
-        // Perform calculation
-        if (!isNaN(salary) && !isNaN(hoursPerWeek) && !isNaN(weeksPerYear) && hoursPerWeek !== 0 && weeksPerYear !== 0) {
-            var annualSalary = salary;
-            // Calculate annual salary based on pay period
-            var period = $('#pay-period').val();
-            switch (period) {
-                case 'Monthly':
-                    annualSalary *= 12;
-                    break;
-                case 'BiWeekly':
-                    annualSalary *= 26;
-                    break;
-                case 'Weekly':
-                    annualSalary *= 52;
-                    break;
-                case 'Daily':
-                    annualSalary *= 365;
-                    break;
-            }
-
-            var hourlyRate = annualSalary / (hoursPerWeek * weeksPerYear);
-            var monthlyPay = annualSalary / 12;
-            var weeklyPay = annualSalary / 52;
-
-            // Display calculated values
-            $('#calculated-values').html('<div class="p-2"><h2 class="mt-2 text-xs font-semibold">Hourly Rate:</h2><div class="flex mt-1"><p>' + hourlyRate.toFixed(2) + '</p></div></div><div class="p-2"><h2 class="mt-2 text-xs font-semibold">Monthly Pay:</h2><div class="flex mt-1"><p>' + monthlyPay.toFixed(2) + '</p></div></div><div class="p-2"><h2 class="mt-2 text-xs font-semibold">Weekly Pay:</h2><div class="flex mt-1"><p>' + weeklyPay.toFixed(2) + '</p></div></div>');
-        } else {
-            alert('Please enter valid values for salary, hours per week, and weeks per year.');
+        // Perform calculation based on pay period
+        var hourlyRate;
+        if (payPeriod === 'Annual') {
+            hourlyRate = calculateHourlyRate(salary, hoursPerWeek, weeksPerYear);
+        } else if (payPeriod === 'Monthly') {
+            var monthlySalary = salary;
+            hourlyRate = calculateHourlyRateFromMonthlySalary(monthlySalary, hoursPerWeek, weeksPerYear);
+        } else if (payPeriod === 'Hourly') {
+            // Handle Hourly pay period
+            hourlyRate = salary;
+        } else if (payPeriod === 'Daily') {
+            // Handle Daily pay period
+            hourlyRate = (salary / hoursPerWeek / 5).toFixed(2); // Assuming 5 working days in a week
+        } else if (payPeriod === 'Weekly') {
+            // Handle Weekly pay period
+            hourlyRate = (salary / hoursPerWeek).toFixed(2);
         }
+
+        // Display results
+        $('.results .content').html(`
+            <p>Hourly Rate: ${currency}${hourlyRate}</p>
+            <p>Monthly Pay: ${currency}${(hourlyRate * hoursPerWeek * 4).toFixed(2)}</p>
+            <p>Weekly Pay: ${currency}${(hourlyRate * hoursPerWeek).toFixed(2)}</p>
+        `);
+        $('.results').show();
     });
+
+    // Function to handle currency change
+    function handleCurrencyChange(currency) {
+        // Update currency display
+        $('.currency-selector .selected').removeClass('selected');
+        $('.currency-selector button:contains("' + currency + '")').addClass('selected');
+    }
 });

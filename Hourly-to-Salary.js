@@ -1,58 +1,66 @@
-$(document).ready(function () {
-    // Default values
-    let selectedCurrency = '$';
-    let hourlyWage = 0;
-    let hoursPerWeek = '';
-    let weeksPerYear = '';
+// Function to handle currency change
+function handleCurrencyChange(currency) {
+    // Update selected currency display
+    document.getElementById("selected-currency").textContent = currency;
 
-    // Function to update currency buttons
-    function updateCurrencyButtons() {
-        $('#currency-buttons').empty();
-        ['$', '€', '£', '₹', '¥'].forEach(currency => {
-            $('#currency-buttons').append(`
-                <button class="px-3 py-1 rounded-md mr-2 mb-2 ${selectedCurrency === currency ? 'bg-black text-white' : 'bg-gray-200'}">${currency}</button>
-            `);
-        });
+    // Calculate the rates with the new currency
+    calculateRates();
+}
+
+// Function to calculate the annual salary
+function calculateRates() {
+    // Get the input values
+    var hourlyWage = parseFloat(document.getElementById("hourly-wage").textContent);
+    var hoursPerWeek = parseInt(document.getElementById("hours-per-week").value);
+    var weeksPerYear = parseInt(document.getElementById("weeks-per-year").value);
+
+    // Check if any of the input values are not valid numbers or are empty
+    if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear) || !hourlyWage || !hoursPerWeek || !weeksPerYear) {
+        // Display an error message
+        document.getElementById("error-message").innerText = "Please fill in all required fields with valid numeric values.";
+        document.getElementById("popup").style.display = "block";
+        return; // Exit the function
     }
 
-    // Update currency buttons
-    updateCurrencyButtons();
+    // Define exchange rates manually
+    const exchangeRates = {
+        '$': 1,  // USD is the base currency
+        '€': 0.85, // Euro to USD exchange rate
+        '£': 0.75, // British Pound to USD exchange rate
+        '₹': 74.21, // Indian Rupee to USD exchange rate
+        '¥': 114.41 // Japanese Yen to USD exchange rate
+    };
 
-    // Currency button click handler
-    $(document).on('click', '#currency-buttons button', function () {
-        selectedCurrency = $(this).text();
-        $('#selected-currency').text(selectedCurrency);
-    });
+    // Get the selected currency
+    var selectedCurrency = document.getElementById("selected-currency").textContent;
 
-    // Hourly wage slider change handler
-    $('#hourly-wage-slider').on('input', function () {
-        hourlyWage = $(this).val();
-        $('#hourly-wage').text(hourlyWage);
-    });
+    // Get the exchange rate for the selected currency
+    var exchangeRate = exchangeRates[selectedCurrency];
 
-    // Calculate button click handler
-    $('#calculate-button').on('click', function () {
-        // Retrieve values from inputs
-        hoursPerWeek = $('#hours-per-week').val();
-        weeksPerYear = $('#weeks-per-year').val();
+    // Calculate the annual salary in USD
+    var annualSalaryUSD = hourlyWage * hoursPerWeek * weeksPerYear;
 
-        // Perform calculations
-        if (!hourlyWage || !hoursPerWeek || !weeksPerYear) {
-            alert('Please fill in all required fields.');
-            return;
-        }
+    // Convert the annual salary to the selected currency
+    var annualSalary = annualSalaryUSD * exchangeRate;
 
-        // Calculation logic
-        const annualSalary = parseFloat(hourlyWage) * parseFloat(hoursPerWeek) * parseFloat(weeksPerYear);
-        const monthlySalary = annualSalary / 12;
-        const weeklyPay = annualSalary / 52;
+    // Calculate monthly pay and weekly pay
+    var monthlyPay = annualSalary / 12;
+    var weeklyPay = annualSalary / 52;
 
-        // Display calculated salary
-        $('#calculated-salary').html(`
-            <h2 class="text-xl font-semibold">Calculated Salary</h2>
-            <p class="mt-2">Annual Salary: ${selectedCurrency}${annualSalary.toFixed(2)}</p>
-            <p>Monthly Salary: ${selectedCurrency}${monthlySalary.toFixed(2)}</p>
-            <p>Weekly Pay: ${selectedCurrency}${weeklyPay.toFixed(2)}</p>
-        `);
-    });
+    // Display the calculated results
+    document.getElementById("calculated-salary").innerHTML = "Annual Salary: " + selectedCurrency + " " + annualSalary.toFixed(2) + "<br> Monthly Pay: " + selectedCurrency + " " + monthlyPay.toFixed(2) + "<br> Weekly Pay: " + selectedCurrency + " " + weeklyPay.toFixed(2);
+}
+
+// Event listener for the "Calculate" button
+document.querySelector(".calculate-button").addEventListener("click", calculateRates);
+
+// Event listener for the "Close" button in the popup
+document.getElementById("close-popup").addEventListener("click", function () {
+    document.getElementById("popup").style.display = "none";
+});
+
+// Update hourly wage value when the slider is changed
+document.getElementById("hourly-wage-slider").addEventListener("input", function () {
+    var sliderValue = parseFloat(this.value);
+    document.getElementById("hourly-wage").textContent = sliderValue;
 });

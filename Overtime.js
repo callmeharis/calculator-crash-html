@@ -1,22 +1,16 @@
-$(document).ready(function () {
-    // Function to calculate overtime pay
-    function calculateOvertimePay() {
-        var standardRate = parseFloat($('#standardRate').val());
-        var hoursWorkedAtOvertime = parseFloat($('#hoursWorkedAtOvertime').val());
-        var overtimeMultiplier = parseFloat($('#overtimeMultiplier').val());
+// Function to handle currency change
+function handleCurrencyChange(currency) {
+    // Update selected currency display
+    document.getElementById("selected-currency").textContent = currency;
 
-        if (isNaN(standardRate) || isNaN(hoursWorkedAtOvertime)) {
-            alert('Please fill in all required fields with valid numeric values.');
-            return;
-        }
+    // Calculate the rates with the new currency
+    calculateRates();
+}
 
-        var totalOvertimePay = standardRate * overtimeMultiplier * hoursWorkedAtOvertime;
+// Event listener for the "Calculate" button
+document.querySelector(".calculate-button").addEventListener("click", calculateRates);
 
-        $('#totalOvertimePay').text(totalOvertimePay.toFixed(2));
-    }
-
-    // Event handler for the Calculate button
-    $('#calculateBtn').click(function () {
-        calculateOvertimePay();
-    });
+// Event listener for the "Close" button in the popup
+document.getElementById("close-popup").addEventListener("click", function () {
+    document.getElementById("popup").style.display = "none";
 });

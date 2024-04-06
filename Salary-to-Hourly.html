@@ -92,7 +92,12 @@
                                 </div>
                             </div>
                             <div class="mt-6">
-                                <button class="calculate-button" onclick="calculateRates()">Calculate</button>
+                                <button class="calculate-button" onclick="calculateHourlyRate()">Calculate</button>
+                            </div>
+                        </div>
+                        <div class="flex-item">
+                            <div class="results">
+                                <div class="content"></div>
                             </div>
                         </div>
                     </div>
@@ -121,74 +126,14 @@
         </div>
         <div class="popup" id="popup">
             <div class="popup-content">
-                <p>Please fill in all required fields with valid numeric values.</p>
+                <p id="error-message"></p>
                 <button class="popup-button" id="close-popup">Close</button>
             </div>
         </div>
+    </div>
+    </div>
 
-        <div class="results">
-            <div class="content"></div>
-        </div>
-
-        <script>
-            $(document).ready(function () {
-                // Function to calculate hourly rate
-                function calculateHourlyRate(salary, hoursPerWeek, weeksPerYear) {
-                    return (salary / (hoursPerWeek * weeksPerYear)).toFixed(2);
-                }
-
-                // Function to calculate hourly rate from monthly salary
-                function calculateHourlyRateFromMonthlySalary(monthlySalary, hoursPerWeek, weeksPerYear) {
-                    return ((monthlySalary * 12) / (hoursPerWeek * weeksPerYear)).toFixed(2);
-                }
-
-                // Calculate salary from hourly rate
-                function calculateSalaryFromHourlyRate(hourlyRate, hoursPerWeek, weeksPerYear) {
-                    return (hourlyRate * hoursPerWeek * weeksPerYear).toFixed(2);
-                }
-
-                // Calculate hourly rate and display results
-                $('.calculate-button').click(function () {
-                    // Get input values
-                    var currency = $('.currency-button.active').text();
-                    var salary = $('#salary').val();
-                    var hoursPerWeek = $('#hoursPerWeek').val();
-                    var weeksPerYear = $('#weeksPerYear').val();
-                    var payPeriod = $('.pay-choice.active').text();
-
-                    // Perform calculation based on pay period
-                    var hourlyRate;
-                    if (payPeriod === 'Annual') {
-                        hourlyRate = calculateHourlyRate(salary, hoursPerWeek, weeksPerYear);
-                    } else if (payPeriod === 'Monthly') {
-                        var monthlySalary = salary;
-                        hourlyRate = calculateHourlyRateFromMonthlySalary(monthlySalary, hoursPerWeek, weeksPerYear);
-                    } else if (payPeriod === 'Hourly') {
-                        // Handle Hourly pay period
-                        hourlyRate = salary;
-                    } else if (payPeriod === 'Daily') {
-                        // Handle Daily pay period
-                        hourlyRate = (salary / hoursPerWeek / 5).toFixed(2); // Assuming 5 working days in a week
-                    } else if (payPeriod === 'Weekly') {
-                        // Handle Weekly pay period
-                        hourlyRate = (salary / hoursPerWeek).toFixed(2);
-                    }
-
-                    // Display results
-                    $('.results .content').html(`
-                          <p>Hourly Rate: ${currency}${hourlyRate}</p>
-                          <p>Monthly Pay: ${currency}${(hourlyRate * hoursPerWeek * 4).toFixed(2)}</p>
-                          <p>Weekly Pay: ${currency}${(hourlyRate * hoursPerWeek).toFixed(2)}</p>
-                        `);
-                    $('.results').show();
-                });
-
-                // Close popup
-                $('.close-button').click(function () {
-                    $('.popup').hide();
-                });
-            });
-        </script>
+    <script src="Salary-to-Hourly.js"></script>
     </div>
 
 </body>
