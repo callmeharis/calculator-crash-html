@@ -56,6 +56,8 @@
     width: 450px;
     margin-left: 50px;
     margin-top: 10%;
+    border-color: #000000;
+    border-radius: 15%;
 }
 
 .grid-container {
@@ -136,4 +138,13 @@
     width: 100%;
     padding: 2%;
     font-size: 15px;
+}
+
+.main {
+    display: flex;
+    padding: 30px;
+}
+
+.select-container {
+    border-radius: 2px;
 }

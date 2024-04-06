@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overtime Calculator</title>
+    <link rel="stylesheet" href="Overtime.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar">
+        <ul class="nav-list">
+            <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
+            <li><a href="Salary-to-Hourly.html" onclick="showSalaryToHourly()">Salary to Hourly Calculator</a></li>
+            <li><a href="Time-and-a-Half.html" onclick="showTimeAndHalf()">Time and a Half Calculator</a></li>
+            <li><a href="Overtime.html" onclick="showOvertime()">Overtime Calculator</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div id="overtime-root">
+            <div class="flex-container">
+                <div class="grid-top">
+                    <div class="flex-item">
+                        <div class="absolute-box">
+                            <h1 class="heading">Salary Calculator</h1>
+
+                            <div class="grid-container">
+                                <div>
+                                    <h2 class="text-xs font-semibold">Currency</h2>
+                                    <div class="currency-selector">
+                                        <button onclick="handleCurrencyChange('$')" class="selected">$</button>
+                                        <button onclick="handleCurrencyChange('€')" class="selected">€</button>
+                                        <button onclick="handleCurrencyChange('£')" class="selected">£</button>
+                                        <button onclick="handleCurrencyChange('₹')" class="selected">₹</button>
+                                        <button onclick="handleCurrencyChange('¥')" class="selected">¥</button>
+                                    </div>
+                                </div>
+                                <div class="pay-rate">
+                                    <h2 class="mt-2 text-xs font-semibold"> Pay rate choice:</h2>
+                                    <div class="pay-rate-choice">
+                                        <button onclick="setPayRateChoice('Hourly')" class="pay">Hourly</button>
+                                        <button onclick="setPayRateChoice('Daily')" class="pay">Daily</button>
+                                        <button onclick="setPayRateChoice('Weekly')" class="pay">Weekly</button>
+                                        <button onclick="setPayRateChoice('Monthly')" class="pay">Monthly</button>
+                                        <button onclick="setPayRateChoice('Annual')" class="pay">Annual</button>
+                                    </div>
+                                </div>
+                                <div class="pay-rate">
+                                    <h2 class="mt-2 text-xs font-semibold">Standard hourly pay rate:</h2>
+                                    <div class="hourly-rate-container">
+                                        <span>$</span>
+                                        <input type="range" min="0" max="100" value="15" class="hourly-rate-slider">
+                                        <span>15</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="mt-2 text-xs font-semibold">Overtime multiplier:</h2>
+                                    <div class="select-container">
+                                        <select>
+                                            <option>Time and a half</option>
+                                            <option>Double Time</option>
+                                            <option>Triple Time</option>
+                                            <option>Other</option>
+                                        </select>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                                <div class='standard-hours-container'>
+                                    <div>
+                                        <h2 class='mt-2 text-xs font-semibold '>
+                                            Hours worked per standard day:
+                                        </h2>
+                                        <div class='flex mt-1'>
+                                            <input type="text" class='w-40 p-2 rounded-md ' value="8"
+                                                onchange="setStandardHours(this.value)" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray">
+                                    <div class="p-5">
+                                        <h2 class="mt-2 text-xs font-semibold">Hours worked at time and a half
+                                            (Optional):
+                                        </h2>
+                                        <div class="flex mt-1">
+                                            <input type="text">
+                                        </div>
+                                    </div>
+                                    <div class="pb-5 pl-5">
+                                        <h2 class="mt-2 text-xs font-semibold">Standard hours worked (Optional):</h2>
+                                        <div class="flex mt-1">
+                                            <input type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button class="calculate-button" onclick="calculateRates()">Calculate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex-item">
+            <div class="overtime-info">
+                <h2 class="info-heading">Time and a Half <br> Calculator</h2>
+                <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent
+                    hourly
+                    wage
+                    based on your annual salary. It considers total hours worked per week, potential bonuses,
+                    and
+                    factors in vacation time into its calculations. You can always easily edit the calculator to
+                    suit
+                    your specific needs, such as including different taxation factors, and any other additional
+                    variables.</p>
+                <h2 class="font-bold text-xl mb-5">FORMULA</h2>
+                <p class="info-paragraph">Basic Salary = Gross Salary – Total Allowances (DA + HRA + Medical
+                    Insurance +
+                    Other Allowances) or Basic salary = CTC x Percentage</p>
+                <h2 class="font-bold text-xl mb-5">WORKS BEST FOR</h2>
+                <p class="info-paragraph">The hourly wage calculator is perfect for personal use, accounting
+                    services
+                    and companies.</p>
+            </div>
+        </div>
+    </div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <p>Please fill in all required fields with valid numeric values.</p>
+            <button class="popup-button" id="close-popup">Close</button>
+        </div>
+    </div>
+    <script>
+        // Function to handle currency change
+        function handleCurrencyChange(currency) {
+            var selectedCurrencyElement = document.getElementById('selected-currency');
+            selectedCurrencyElement.textContent = currency;
+            // Trigger the change event
+            selectedCurrencyElement.dispatchEvent(new Event('change'));
+        }
+
+        // Function to set pay rate choice
+        function setPayRateChoice(choice) {
+            // Implement logic to handle the pay rate choice
+            var payRateDisplay = document.querySelector('.pay-rate-choice .selected');
+            payRateDisplay.textContent = choice;
+            // Update any necessary variables or UI elements based on the choice
+        }
+
+        // Function to set standard hours
+        function setStandardHours(hours) {
+            // Implement logic to handle the standard hours
+            var standardHoursInput = document.querySelector('.standard-hours-container input');
+            standardHoursInput.value = hours;
+            // Update any necessary variables or UI elements based on the standard hours
+        }
+
+        // Function to calculate overtime rates
+        function calculateRates() {
+            // Implement logic to calculate overtime rates
+            // Get input values
+            var hourlyRate = parseFloat(document.querySelector('.hourly-rate-container input[type="range"]').value);
+            var overtimeMultiplier = document.querySelector('.select-container select').value;
+            var standardHours = parseFloat(document.querySelector('.standard-hours-container input').value);
+            var hoursWorkedAtTimeAndHalf = parseFloat(document.querySelector('.bg-gray .flex:nth-child(1) input').value);
+            var standardHoursWorked = parseFloat(document.querySelector('.bg-gray .flex:nth-child(2) input').value);
+
+            // Perform calculations based on the chosen overtime multiplier
+            var overtimeRate;
+            switch (overtimeMultiplier) {
+                case 'Time and a half':
+                    overtimeRate = hourlyRate * 1.5;
+                    break;
+                case 'Double Time':
+                    overtimeRate = hourlyRate * 2;
+                    break;
+                case 'Triple Time':
+                    overtimeRate = hourlyRate * 3;
+                    break;
+                case 'Other':
+                    // Implement custom logic for other overtime multipliers
+                    break;
+                default:
+                    // Default case
+                    overtimeRate = hourlyRate;
+            }
+
+            // Calculate overtime pay
+            var overtimePay = 0;
+            if (!isNaN(hoursWorkedAtTimeAndHalf)) {
+                overtimePay += hoursWorkedAtTimeAndHalf * overtimeRate;
+            }
+            if (!isNaN(standardHoursWorked)) {
+                overtimePay += standardHoursWorked * overtimeRate;
+            }
+            // Display the calculated overtime pay or perform further actions based on your requirements
+            console.log("Overtime Pay: $" + overtimePay.toFixed(2));
+        }
+    </script>
+</body>
+
+</html>

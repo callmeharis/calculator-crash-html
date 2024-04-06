@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Calculator</title>
+    <link rel="stylesheet" href="Time-and-a-Half.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="navbar">
+        <ul class="nav-list">
+            <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
+            <li><a href="Salary-to-Hourly.html" onclick="showSalaryToHourly()">Salary to Hourly Calculator</a></li>
+            <li><a href="Time-and-a-Half.html" onclick="showTimeAndHalf()">Time and a Half Calculator</a></li>
+            <li><a href="Overtime.html" onclick="showOvertime()">Overtime Calculator</a></li>
+        </ul>
+    </div>
+    <div id="time-and-a-half-root">
+        <div class="flex-container">
+            <div class="grid-top">
+                <div class="flex-item">
+                    <div class="absolute-box">
+                        <h1 class="heading">Time and a Half</h1>
+
+                        <div class="grid-container">
+                            <div>
+                                <h2 class="">Currency</h2>
+                                <div class="currency-selector">
+                                    <button onclick="handleCurrencyChange('$')" class="selected">$</button>
+                                    <button onclick="handleCurrencyChange('€')" class="selected">€</button>
+                                    <button onclick="handleCurrencyChange('£')" class="selected">£</button>
+                                    <button onclick="handleCurrencyChange('₹')" class="selected">₹</button>
+                                    <button onclick="handleCurrencyChange('¥')" class="selected">¥</button>
+                                </div>
+                            </div>
+                            <div class="pay-rate">
+                                <h2 class=''> Pay rate choice:</h2>
+                                <div class='pay-rate-choice'>
+                                    <button onclick="setPayRateChoice('Hourly')" class="pay">Hourly</button>
+                                    <button onclick="setPayRateChoice('Daily')" class="pay">Daily</button>
+                                    <button onclick="setPayRateChoice('Weekly')" class="pay">Weekly</button>
+                                    <button onclick="setPayRateChoice('Monthly')" class="pay">Monthly</button>
+                                    <button onclick="setPayRateChoice('Annual')" class="pay">Annual</button>
+                                </div>
+                            </div>
+                            <div class="pay-rate">
+                                <h2 class='mt-2 text-xs font-semibold'>Standard hourly pay rate:</h2>
+                                <div class='hourly-rate-container'>
+                                    <span>$</span>
+                                    <input value="15" type="range" min="0" max="100"
+                                        onchange="setStandardRate(this.value)" class="hourly-rate-slider" />
+                                    <span>15</span>
+                                </div>
+                            </div>
+
+                            <div class='standard-hours-container'>
+                                <div>
+                                    <h2 class='mt-2 text-xs font-semibold '>
+                                        Hours worked per standard day:
+                                    </h2>
+                                    <div class='flex mt-1'>
+                                        <input type="text" class='w-40 p-2 rounded-md ' value="8"
+                                            onchange="setStandardHours(this.value)" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hours-rate">
+                                <div class='hours-worked-container'>
+                                    <div>
+                                        <h2 class='mt-2 text-xs font-semibold '>
+                                            Hours worked at time and a half (Optional):
+                                        </h2>
+                                        <div class='flex mt-1'>
+                                            <input type="number" class='p-2 rounded-md w-52' value=""
+                                                onchange="setHoursWorked(this.value)" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h2 class='mt-2 text-xs font-semibold '>
+                                            Standard hours worked (Optional):
+                                        </h2>
+                                        <div class='flex mt-1'>
+                                            <input type="number" class='w-40 p-2 rounded-md ' value=""
+                                                onchange="setStandardHours(this.value)" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button class="calculate-button" onclick="calculateRates()">Calculate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-item">
+                <div class="time-and-a-half-info">
+                    <h2 class="info-heading">Time and a half <br> Calculator</h2>
+                    <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent hourly
+                        wage
+                        based on your annual salary. It considers total hours worked per week, potential bonuses, and
+                        factors in vacation time into its calculations. You can always easily edit the calculator to
+                        suit
+                        your specific needs, such as including different taxation factors, and any other additional
+                        variables.</p>
+                    <h2 class='font-bold text-xl mb-5'>FORMULA</h2>
+                    <p class='info-paragraph'>Basic Salary = Gross Salary – Total Allowances (DA + HRA + Medical
+                        Insurance +
+                        Other Allowances) or Basic salary = CTC x Percentage</p>
+                    <h2 class='font-bold text-xl mb-5'>WORKS BEST FOR</h2>
+                    <p class='info-paragraph'>The hourly wage calculator is perfect for personal use, accounting
+                        services
+                        and companies.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Results section -->
+        <!-- Results section -->
+        <div class="results-section" style="display: none;">
+            <h2 class="mt-2 text-xs font-semibold">Results:</h2>
+            <p class="time-and-a-half-rate"></p>
+            <p class="standard-hourly-rate"></p>
+            <p class="time-and-a-half-pay"></p>
+            <p class="standard-pay"></p>
+            <p class="total-money-earned"></p>
+        </div>
+
+        <!-- Popup message -->
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <p>Please fill in the standard hourly pay rate.</p>
+                <button class="popup-button" onclick="handlePopup()">Close</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function calculateRates() {
+            var standardRate = parseFloat($('.hourly-rate-slider').val());
+            var hoursWorked = parseFloat($('.hours-worked-container input[type="number"]').val());
+            var selectedCurrency = $('.currency-selector button.selected').text();
+            var payRateChoice = $('.pay-rate-choice button.selected').text();
+
+            // Check if either standard rate or hours worked is not a valid number
+            if (!standardRate || isNaN(standardRate) || !hoursWorked || isNaN(hoursWorked)) {
+                $('.results-section').hide(); // Hide the results section
+                return; // Exit the function early
+            }
+
+            // Perform calculations based on pay rate choice
+            var standardPay = 0;
+            var timeAndHalfPay = 0;
+
+            switch (payRateChoice) {
+                case 'Hourly':
+                    standardPay = standardRate * hoursWorked;
+                    timeAndHalfPay = standardRate * 1.5 * hoursWorked;
+                    break;
+                case 'Daily':
+                    standardPay = standardRate * 8;
+                    timeAndHalfPay = standardRate * 1.5 * 8;
+                    break;
+                case 'Weekly':
+                    standardPay = standardRate * 40;
+                    timeAndHalfPay = standardRate * 1.5 * 40;
+                    break;
+                case 'Monthly':
+                    standardPay = standardRate * 160; // 40 hours per week for 4 weeks
+                    timeAndHalfPay = standardRate * 1.5 * 160;
+                    break;
+                case 'Annual':
+                    standardPay = standardRate * 2080; // 40 hours per week for 52 weeks
+                    timeAndHalfPay = standardRate * 1.5 * 2080;
+                    break;
+                default:
+                    alert('Invalid pay rate choice');
+                    return;
+            }
+
+            // Display the results
+            $('.results-section').show(); // Show the results section
+            $('.results-section p:eq(0)').text('Time and a half rate: ' + selectedCurrency + ' ' + (standardRate * 1.5).toFixed(2));
+            $('.results-section p:eq(1)').text('Standard hourly rate: ' + selectedCurrency + ' ' + standardRate.toFixed(2));
+            $('.results-section p:eq(2)').text('Time and a half pay: ' + selectedCurrency + ' ' + timeAndHalfPay.toFixed(2));
+            $('.results-section p:eq(3)').text('Standard pay: ' + selectedCurrency + ' ' + standardPay.toFixed(2));
+            $('.results-section p:eq(4)').text('Total money earned: ' + selectedCurrency + ' ' + (standardPay + timeAndHalfPay).toFixed(2));
+        }
+    </script>
+
+</body>
+
+</html>
