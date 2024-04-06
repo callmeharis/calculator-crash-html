@@ -28,8 +28,8 @@
 
     <div class="calculator-main">
         <div class="calculator-calculation-parent">
-            <div class="calculator-calculation-card">
-                <h1>Salary Calculator</h1>
+            <div class="calculator-calculation-card1">
+                <h1>Hourly Calculator</h1>
                 <div class="grid-container">
                     <h2>Currency</h2>
                     <div class="currency-selector">
@@ -38,14 +38,6 @@
                         <button onclick="handleCurrencyChange('£')" class="selected">£</button>
                         <button onclick="handleCurrencyChange('₹')" class="selected">₹</button>
                         <button onclick="handleCurrencyChange('¥')" class="selected">¥</button>
-                    </div>
-                    <h2>Pay rate choice:</h2>
-                    <div class="currency-selector">
-                        <button onclick="handleCurrencyChange('$')" class="selected">Annual</button>
-                        <button onclick="handleCurrencyChange('€')" class="selected">Monthly</button>
-                        <button onclick="handleCurrencyChange('£')" class="selected">BiWeekly</button>
-                        <button onclick="handleCurrencyChange('₹')" class="selected">Weekly</button>
-                        <button onclick="handleCurrencyChange('¥')" class="selected">Daily</button>
                     </div>
                     <div class="input-group">
                         <label for="hourly-wage">Hourly pay</label>
@@ -57,12 +49,12 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="hours-per-week">Hours worked per week:</label>
+                        <label for="hours-per-week">Work hours per week</label>
                         <input type="text" id="hours-per-week"
                             class="w-full p-2 mt-2 border border-gray-300 rounded-md">
                     </div>
                     <div class="input-group">
-                        <label for="weeks-per-year">Weeks worked per year:</label>
+                        <label for="weeks-per-year">Work weeks per year</label>
                         <input type="text" id="weeks-per-year"
                             class="w-full p-2 mt-2 border border-gray-300 rounded-md">
                     </div>
@@ -74,7 +66,7 @@
         </div>
         <div class="flex-item">
             <div class="time-and-a-half-info">
-                <h1 class="info-heading">Salary Calculator</h1>
+                <h1 class="info-heading">Hourly Calculator</h1>
                 <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent
                     hourly
                     wage
