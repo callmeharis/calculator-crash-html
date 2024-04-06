@@ -4,15 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
+    <title>E-Finance Calculator</title>
+    <!-- Include CSS files -->
+    <link rel="stylesheet" href="Hourly-to-Salary.css">
+    <link rel="stylesheet" href="Salary-to-Hourly.css">
+    <link rel="stylesheet" href="Time-and-a-Half.css">
+    <link rel="stylesheet" href="Overtime.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
-
+    <!-- Navigation Links -->
+    <div class="navbar">
+        <ul class="nav-list">
+            <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
+            <li><a href="Salary-to-Hourly.html" onclick="showSalaryToHourly()">Salary to Hourly Calculator</a></li>
+            <li><a href="Time-and-a-Half.html" onclick="showTimeAndHalf()">Time and a Half Calculator</a></li>
+            <li><a href="Overtime.html" onclick="showOvertime()">Overtime Calculator</a></li>
+        </ul>
     </div>
-    <script src="./index.js"></script>
+
+    <!-- Container for Calculator Components -->
+    <div id="calculator-container"></div>
+
+    <!-- Include JavaScript files -->
+    <script src="Hourly-to-Salary.js"></script>
+    <script src="Salary-to-Hourly.js"></script>
+    <script src="Time-and-a-Half.js"></script>
+    <script src="Overtime.js"></script>
+
+    <script>
+        // Function to show Hourly to Salary Calculator component
+        function showHourlyToSalary() {
+            $('#calculator-container').empty(); // Clear previous content
+            ReactDOM.render(<HourlyToSalaryCalculator />, document.getElementById('calculator-container'));
+        }
+
+        // Function to show Salary to Hourly Calculator component
+        function showSalaryToHourly() {
+            $('#calculator-container').empty(); // Clear previous content
+            ReactDOM.render(<SalaryToHourlyCalculator />, document.getElementById('calculator-container'));
+        }
+
+        // Function to show Time and a Half Calculator component
+        function showTimeAndHalf() {
+            $('#calculator-container').empty(); // Clear previous content
+            ReactDOM.render(<TimeAndHalfCalculator />, document.getElementById('calculator-container'));
+        }
+
+        // Function to show Overtime Calculator component
+        function showOvertime() {
+            $('#calculator-container').empty(); // Clear previous content
+            ReactDOM.render(<OvertimeCalculator />, document.getElementById('calculator-container'));
+        }
+
+        // By default, show the Hourly to Salary Calculator
+        showHourlyToSalary();
+    </script>
 </body>
 
 </html>
