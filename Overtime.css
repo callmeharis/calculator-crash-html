@@ -1,5 +1,4 @@
-/* Navbar container */
-.navbar {
+Navbar container .navbar {
     background-color: #000000;
     /* Navbar background color */
     padding: 10px 20px;
@@ -132,7 +131,7 @@
     padding: 5%;
 }
 
-.calculate-button {
+.calculate-btn {
     background-color: #000000;
     color: #fff;
     width: 100%;
