@@ -69,7 +69,7 @@
                     </div>
                     <div>
                         <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
-                        <div id="calculated-salary"></div>
+
                     </div>
                 </div>
             </div>
@@ -101,6 +101,23 @@
                 <p>Please fill in all required fields with valid numeric values.</p>
                 <button class="popup-button" id="close-popup">Close</button>
             </div>
+        </div>
+    </div>
+    <div id="calculated-salary" class="result-main">
+        <h1>Calculation Result :</h1>
+        <div class="card-main">
+            <div class="card1">
+                <h1>Hourly Pay :</h1>
+                <p>15$</p>
+            </div>
+            <div class="card1">
+                <h1>Monthly Pay:</h1>
+                <p>15$</p>
+            </div>
+        </div>
+        <div class="card1">
+            <h1>Per Week:</h1>
+            <p>15$</p>
         </div>
     </div>
 
@@ -170,10 +187,10 @@
 
             // Display calculated salary
             document.getElementById('calculated-salary').innerHTML =
-                '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
-                '<p class="mt-2">Hourly Pay: ' + selectedCurrency + hourlyWage.toFixed(2) + '</p>' +
-                '<p class="mt-2">Monthly Pay (avg): ' + selectedCurrency + monthlyPay.toFixed(2) + '</p>' +
-                '<p class="mt-2">Per Week: ' + selectedCurrency + weeklyPay.toFixed(2) + '</p>';
+                '<h2 class="">Calculated Salary</h2>' +
+                '<p class="">Hourly Pay: ' + selectedCurrency + hourlyWage.toFixed(2) + '</p>' +
+                '<p class="">Monthly Pay (avg): ' + selectedCurrency + monthlyPay.toFixed(2) + '</p>' +
+                '<p class="">Per Week: ' + selectedCurrency + weeklyPay.toFixed(2) + '</p>';
         }
 
         document.addEventListener("DOMContentLoaded", function () {
