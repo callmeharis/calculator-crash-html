@@ -151,6 +151,29 @@
     font-size: 16px;
 }
 
+.currency-selector button.selected {
+    background-color: #000;
+    color: #fff;
+}
+
+.currency-selector button:hover {
+    background-color: #ddd;
+    color: #000;
+}
+
+.currency-selector button.selected:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.currency-selector button:focus {
+    outline: none;
+}
+
+.currency-selector button:active {
+    transform: translateY(1px);
+}
+
 .input-main {
     background-color: #ccc;
     padding: 30px;

@@ -27,56 +27,57 @@
     </div>
 
     <div class="calculator-main">
-        <div class="calculator-calculation-parent">
-            <div class="calculator-calculation-card">
-                <h1>Salary Calculator</h1>
+        <div class="calculator-calculation-parent1">
+            <div class="calculator-calculation-card2">
+                <h1>Time Calculator</h1>
                 <div class="grid-container">
                     <h2>Currency</h2>
                     <div class="currency-selector">
                         <button onclick="handleCurrencyChange('$')" class="selected">$</button>
-                        <button onclick="handleCurrencyChange('€')" class="selected">€</button>
-                        <button onclick="handleCurrencyChange('£')" class="selected">£</button>
-                        <button onclick="handleCurrencyChange('₹')" class="selected">₹</button>
-                        <button onclick="handleCurrencyChange('¥')" class="selected">¥</button>
+                        <button onclick="handleCurrencyChange('€')">€</button>
+                        <button onclick="handleCurrencyChange('£')">£</button>
+                        <button onclick="handleCurrencyChange('₹')">₹</button>
+                        <button onclick="handleCurrencyChange('¥')">¥</button>
                     </div>
                     <h2>Pay rate choice:</h2>
                     <div class="currency-selector">
-                        <button onclick="handleCurrencyChange('$')" class="selected">Annual</button>
-                        <button onclick="handleCurrencyChange('€')" class="selected">Monthly</button>
-                        <button onclick="handleCurrencyChange('£')" class="selected">BiWeekly</button>
-                        <button onclick="handleCurrencyChange('₹')" class="selected">Weekly</button>
-                        <button onclick="handleCurrencyChange('¥')" class="selected">Daily</button>
+                        <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
+                        <button onclick="handlePayRateChoice('Daily')">Daily</button>
+                        <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
+                        <button onclick="handlePayRateChoice('Monthly')">Monthly</button>
+                        <button onclick="handlePayRateChoice('Annual')">Annual</button>
                     </div>
                     <div class="input-group">
                         <label for="hourly-wage">Hourly pay</label>
                         <div class="hourly-pay">
-                            <span id="selected-currency">$</span>
-                            <input type="range" id="hourly-wage-slider" min="0" max="100" value="0"
-                                class="w-full bg-black-500">
-                            <span id="hourly-wage" class="ml-3">0</span>
+                            <span id="selected-currency">€</span>
+                            <input type="number" id="hourly-wage" min="0" step="0.01"
+                                class="w-full p-2 mt-2 border border-gray-300 rounded-md" value="5">
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label for="hours-per-week">Hours worked per week:</label>
-                        <input type="text" id="hours-per-week"
-                            class="w-full p-2 mt-2 border border-gray-300 rounded-md">
-                    </div>
-                    <div class="input-group">
-                        <label for="weeks-per-year">Weeks worked per year:</label>
-                        <input type="text" id="weeks-per-year"
-                            class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                    <div class="input-main">
+                        <div class="input-group">
+                            <label for="hours-per-week">Work hours per week</label>
+                            <input type="number" id="hours-per-week" min="0" value="40"
+                                class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                        </div>
+                        <div class="input-group">
+                            <label for="weeks-per-year">Work weeks per year</label>
+                            <input type="number" id="weeks-per-year" min="0" value="52"
+                                class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                        </div>
                     </div>
                     <div>
                         <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
+                        <div id="calculated-salary"></div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="flex-item">
             <div class="time-and-a-half-info">
-                <h1 class="info-heading">Salary Calculator</h1>
-                <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent
-                    hourly
+                <h1 class="info-heading">Time and a half Calculator</h1>
+                <p class="info-paragraph">This calculator provides an easy way to calculate the equivalent hourly
                     wage
                     based on your annual salary. It considers total hours worked per week, potential bonuses,
                     and
@@ -95,95 +96,101 @@
             </div>
         </div>
 
-        <!-- <div class="popup" id="popup">
-                <div class="popup-content">
-                    <p>Please fill in all required fields with valid numeric values.</p>
-                    <button class="popup-button" id="close-popup">Close</button>
-                </div>
-            </div> -->
+        <div class="popup" id="popup">
+            <div class="popup-content">
+                <p>Please fill in all required fields with valid numeric values.</p>
+                <button class="popup-button" id="close-popup">Close</button>
+            </div>
+        </div>
     </div>
-</body>
-<script>
-    // Wait for DOM content to load before executing scripts
-    document.addEventListener("DOMContentLoaded", function () {
+
+    <script>
         // Function to handle currency change
         function handleCurrencyChange(currency) {
             var selectedCurrencyElement = document.getElementById('selected-currency');
             selectedCurrencyElement.textContent = currency;
-
-            // Display median salaries if currency is USD or EUR
-            if (currency === '$') {
-                displayMedianSalary('US', 57200);
-            } else if (currency === '€') {
-                displayMedianSalary('UK', 33000);
-            }
-
-            // Trigger the change event
-            selectedCurrencyElement.dispatchEvent(new Event('change'));
         }
 
-        // Function to display median salary information
-        function displayMedianSalary(country, medianSalary) {
-            document.getElementById('median-salary').innerHTML =
-                '<h2 class="text-xl font-semibold">Median Salary</h2>' +
-                '<p class="mt-2">Median salary in ' + country + ': $' + medianSalary.toFixed(2) + '</p>';
+        // Function to handle pay rate choice
+        function handlePayRateChoice(choice) {
+            var hourlyPayLabel = document.querySelector('.input-group label');
+            if (hourlyPayLabel) {
+                if (choice === 'Hourly') {
+                    hourlyPayLabel.textContent = 'Hourly pay rate:';
+                } else {
+                    hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
+                }
+            }
         }
 
         // Function to calculate salary
         function calculateRates() {
             // Get input values
-            var hourlyWage = parseFloat(document.getElementById('hourly-wage').textContent);
-            var hoursPerWeek = parseFloat(document.getElementById('hours-per-week').value);
-            var weeksPerYear = parseFloat(document.getElementById('weeks-per-year').value);
+            var selectedCurrency = document.getElementById('selected-currency').textContent;
+            var hourlyWage = parseFloat(document.getElementById('hourly-wage').value);
+            var hoursPerWeek = parseInt(document.getElementById('hours-per-week').value);
+            var weeksPerYear = parseInt(document.getElementById('weeks-per-year').value);
+            var payRateChoice = document.querySelector('.currency-selector button.selected').textContent;
 
             // Check if any input is empty or not a number
             if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear)) {
                 // Show popup
                 document.getElementById('popup').style.display = 'flex';
-            } else {
-                // Calculate salary
-                var annualSalary = hourlyWage * hoursPerWeek * weeksPerYear;
-                var monthlySalary = annualSalary / 12;
-                var weeklyPay = annualSalary / 52;
-
-                // Display calculated salary
-                document.getElementById('calculated-salary').innerHTML =
-                    '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
-                    '<p class="mt-2">Annual Salary: $' + annualSalary.toFixed(2) + '</p>' +
-                    '<p>Monthly Salary: $' + monthlySalary.toFixed(2) + '</p>' +
-                    '<p>Weekly Pay: $' + weeklyPay.toFixed(2) + '</p>';
+                return;
             }
+
+            // Calculate total hours worked per year
+            var totalHours = hoursPerWeek * weeksPerYear;
+
+            // Calculate annual salary based on pay rate choice
+            var annualSalary;
+            switch (payRateChoice) {
+                case 'Hourly':
+                    annualSalary = hourlyWage * totalHours;
+                    break;
+                case 'Daily':
+                    annualSalary = hourlyWage * totalHours / 5 * 52; // Assuming 5 working days per week
+                    break;
+                case 'Weekly':
+                    annualSalary = hourlyWage * hoursPerWeek * 52; // Assuming 52 weeks per year
+                    break;
+                case 'Monthly':
+                    annualSalary = hourlyWage * totalHours / 4; // Assuming 4 weeks per month
+                    break;
+                case 'Annual':
+                    annualSalary = hourlyWage * totalHours;
+                    break;
+                default:
+                    annualSalary = 0;
+            }
+
+            // Calculate monthly and weekly pay
+            var monthlyPay = annualSalary / 12;
+            var weeklyPay = annualSalary / 52;
+
+            // Display calculated salary
+            document.getElementById('calculated-salary').innerHTML =
+                '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
+                '<p class="mt-2">Hourly Pay: ' + selectedCurrency + hourlyWage.toFixed(2) + '</p>' +
+                '<p class="mt-2">Monthly Pay (avg): ' + selectedCurrency + monthlyPay.toFixed(2) + '</p>' +
+                '<p class="mt-2">Per Week: ' + selectedCurrency + weeklyPay.toFixed(2) + '</p>';
         }
 
-        // Close popup
-        document.getElementById('close-popup').addEventListener('click', function () {
-            document.getElementById('popup').style.display = 'none';
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set default values
+            handleCurrencyChange('€');
+            handlePayRateChoice('Hourly');
+
+            // Close popup
+            document.getElementById('close-popup').addEventListener('click', function () {
+                document.getElementById('popup').style.display = 'none';
+            });
+
+            // Event listener for calculate button
+            document.querySelector('.calculate-btn').addEventListener('click', calculateRates);
         });
+    </script>
 
-        // Handle currency change event
-        document.getElementById('selected-currency').addEventListener('change', function () {
-            var selectedCurrency = this.textContent;
-            // Define exchange rates manually
-            const exchangeRates = {
-                '$': 1,  // USD is the base currency
-                '€': 0.85, // Euro to USD exchange rate
-                '£': 0.75, // British Pound to USD exchange rate
-                '₹': 74.21, // Indian Rupee to USD exchange rate
-                '¥': 114.41 // Japanese Yen to USD exchange rate
-            };
-
-            // Update exchange rate based on the selected currency
-            setExchangeRate(exchangeRates[selectedCurrency]);
-        });
-
-        // Update hourly wage slider value
-        document.getElementById('hourly-wage-slider').addEventListener('input', function () {
-            document.getElementById('hourly-wage').textContent = this.value;
-        });
-
-        // Event listener for calculate button
-        document.querySelector('.calculate-button').addEventListener('click', calculateRates);
-    });
-</script>
+</body>
 
 </html>
