@@ -121,10 +121,8 @@
         // Define global variable to store pay rate choice
         let payRateChoice = 'Hourly';
 
-        // Function to handle currency change
         function handleCurrencyChange(currency) {
-            var selectedCurrencyElement = document.getElementById('selected-currency');
-            selectedCurrencyElement.textContent = currency;
+            document.getElementById('selected-currency').textContent = currency;
         }
 
         // Function to handle pay rate choice
@@ -138,7 +136,7 @@
                 }
             }
             // Update the global variable with the selected pay rate choice
-            payRateChoice = choice;
+            currentPayRateChoice = choice;
         }
 
         function calculateRates() {
