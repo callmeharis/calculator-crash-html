@@ -146,4 +146,43 @@ Navbar container .navbar {
 
 .select-container {
     border-radius: 2px;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 100px;
+}
+
+.input-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.select-container {
+    display: flex;
+}
+
+.custom-select {
+    flex: 1;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 150px;
+}
+
+.custom-input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    width: 50px;
 }

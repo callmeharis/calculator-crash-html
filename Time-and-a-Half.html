@@ -44,6 +44,7 @@
                         <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
                         <button onclick="handlePayRateChoice('Daily')">Daily</button>
                         <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
+                        <button onclick="handlePayRateChoice('Biweekly')">Biweekly</button>
                         <button onclick="handlePayRateChoice('Monthly')">Monthly</button>
                         <button onclick="handlePayRateChoice('Annual')">Annual</button>
                     </div>
@@ -53,30 +54,28 @@
                             <span id="selected-currency">$</span>
                             <input type="range" id="hourly-wage-slider" min="0" max="100" value="15"
                                 class="w-full bg-black-500">
-                            <span id="hourly-wage" class="ml-3">15</span>
+                            <span id="hourly-wage" class="ml-3"></span>
                         </div>
                     </div>
                     <div class="input-main">
                         <div class="input-group">
-                            <label for="hours-per-week">Hours worked per standard day:</label>
-                            <input type="text" id="hours-per-day"
+                            <label for="hoursAtTimeAndHalf">Hours Worked at Time and a Half:</label>
+                            <input type="text" id="hoursAtTimeAndHalf" value=""
+                                placeholder="Enter hours (1, 1.5, 2, 2.5, etc)"
                                 class="w-full p-2 mt-2 border border-gray-300 rounded-md">
                         </div>
                         <div class="input-group">
-                            <label for="weeks-per-year">Hours worked at time and a half: (optional)</label>
-                            <input type="text" id="weeks-per-year"
+                            <label for="standardHoursWorked">Standard Hours Worked:</label>
+                            <input type="text" id="standardHoursWorked" value="8"
                                 class="w-full p-2 mt-2 border border-gray-300 rounded-md">
                         </div>
-                        <div class="input-group">
-                            <label for="standard-worked-hours">Standard hours worked: (optional)</label>
-                            <input type="text" id="standard-worked-hours"
-                                class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                        <div>
+                            <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
+                            <div id="calculated-salary"></div>
                         </div>
                     </div>
-                    <div>
-                        <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
-                        <div id="calculated-salary"></div>
-                    </div>
+                    <!-- Result display div -->
+                    <div id="result"></div>
                 </div>
             </div>
         </div>
@@ -102,15 +101,26 @@
             </div>
         </div>
 
-        <div class="popup" id="popup">
+        <!-- <div class="popup" id="popup">
             <div class="popup-content">
                 <p>Please fill in all required fields with valid numeric values.</p>
                 <button class="popup-button" id="close-popup">Close</button>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <script>
+        const exchangeRates = {
+            '$': 1, // USD is the base currency
+            '€': 0.85, // Euro to USD exchange rate
+            '£': 0.75, // British Pound to USD exchange rate
+            '₹': 74.21, // Indian Rupee to USD exchange rate
+            '¥': 114.41 // Japanese Yen to USD exchange rate
+        }
+
+        // Define global variable to store pay rate choice
+        let payRateChoice = 'Hourly';
+
         // Function to handle currency change
         function handleCurrencyChange(currency) {
             var selectedCurrencyElement = document.getElementById('selected-currency');
@@ -127,61 +137,95 @@
                     hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
                 }
             }
+            // Update the global variable with the selected pay rate choice
+            payRateChoice = choice;
         }
 
-        // Function to calculate salary
         function calculateRates() {
-            // Get input values
-            var selectedCurrency = document.getElementById('selected-currency').textContent;
-            var hourlyWage = parseFloat(document.getElementById('hourly-wage').textContent);
-            var hoursPerWeek = parseFloat(document.getElementById('hours-per-week').value);
-            var weeksPerYear = parseFloat(document.getElementById('weeks-per-year').value);
-            var payRateChoice = document.querySelector('.currency-selector button.selected').textContent;
-            var standardWorkedHours = parseFloat(document.getElementById('standard-worked-hours').value);
+            var currency = document.getElementById('selected-currency').textContent;
+            var standardPayRate = parseFloat(document.getElementById('hourly-wage-slider').value);
+            var hoursAtTimeAndHalf = parseFloat(document.getElementById('hoursAtTimeAndHalf').value) || 0;
+            var standardHoursWorked = parseFloat(document.getElementById('standardHoursWorked').value) || 0;
+            var timeAndHalfRate = 0;
 
-            // Check if any input is empty or not a number
-            if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear) || isNaN(standardWorkedHours)) {
-                // Show popup
-                document.getElementById('popup').style.display = 'flex';
-                return;
+            // Calculate time and a half rate based on pay rate choice
+            switch (payRateChoice) {
+                case 'Hourly':
+                    timeAndHalfRate = standardPayRate * 1.5;
+                    break;
+                case 'Daily':
+                    timeAndHalfRate = (standardPayRate / standardHoursWorked) * 1.5;
+                    break;
+                case 'Weekly':
+                    timeAndHalfRate = (standardPayRate / (standardHoursWorked * 5)) * 1.5;
+                    break;
+                case 'Biweekly':
+                    timeAndHalfRate = (standardPayRate / (standardHoursWorked * 10)) * 1.5;
+                    break;
+                case 'Monthly':
+                    timeAndHalfRate = (standardPayRate / (standardHoursWorked * 20)) * 1.5;
+                    break;
+                case 'Annual':
+                    timeAndHalfRate = (standardPayRate / (standardHoursWorked * 52)) * 1.5;
+                    break;
             }
 
-            // Calculate standard pay
-            var standardPay;
-            var overtimePay;
-            var standardHours = hoursPerWeek;
-            if (hoursPerWeek > 40 && payRateChoice === 'Hourly') {
-                standardHours = 40;
+            var timeAndHalfPay = hoursAtTimeAndHalf * timeAndHalfRate;
+            var totalEarned = (standardPayRate * standardHoursWorked) + timeAndHalfPay;
+
+            // Apply exchange rate if currency is not USD
+            if (currency !== '$') {
+                timeAndHalfRate /= exchangeRates[currency];
+                timeAndHalfPay /= exchangeRates[currency];
+                totalEarned /= exchangeRates[currency];
             }
-            if (payRateChoice === 'Hourly') {
-                standardPay = hourlyWage * standardHours * weeksPerYear;
-                overtimePay = (hoursPerWeek - 40) * overtimeRate * weeksPerYear; // Assuming 40 hours is standard
-            } else {
-                // Adjust calculation based on pay rate choice
-                var hoursPerPayPeriod = payRateChoice === 'Daily' ? 1 :
-                    payRateChoice === 'Weekly' ? hoursPerWeek :
-                        payRateChoice === 'Monthly' ? hoursPerWeek * 4 :
-                            payRateChoice === 'Annual' ? hoursPerWeek * weeksPerYear : 0;
-                standardPay = hourlyWage * hoursPerPayPeriod;
-                if (hoursPerWeek > 40) {
-                    overtimePay = (hoursPerPayPeriod - 40) * overtimeRate; // Assuming 40 hours is standard
-                } else {
-                    overtimePay = 0;
+
+            // Format results with selected currency
+            var formattedTimeAndHalfRate = currency + timeAndHalfRate.toFixed(2);
+            var formattedTimeAndHalfPay = currency + timeAndHalfPay.toFixed(2);
+            var formattedTotalEarned = currency + totalEarned.toFixed(2);
+
+            // Update result display
+            var resultElement = document.getElementById('result');
+            resultElement.innerHTML = '<h2>Results:</h2>' +
+                '<p>Time and a Half Rate: ' + formattedTimeAndHalfRate + '</p>' +
+                '<p>Time and a Half Pay: ' + formattedTimeAndHalfPay + '</p>' +
+                '<p>Total Money Earned: ' + formattedTotalEarned + '</p>';
+        }
+
+        // Function to update hourly wage slider value
+        function updateHourlyWageSlider(value) {
+            document.getElementById('hourly-wage-slider').value = value;
+            document.getElementById('hourly-wage').textContent = value;
+        }
+
+        // Event listener for mousedown on hourly wage element
+        document.getElementById('hourly-wage').addEventListener('mousedown', function (e) {
+            var slider = document.getElementById('hourly-wage-slider');
+            var startX = e.clientX;
+            var startValue = parseFloat(slider.value);
+
+            function moveHandler(e) {
+                var deltaX = e.clientX - startX;
+                var newValue = startValue + deltaX * (slider.max - slider.min) / slider.offsetWidth;
+                if (newValue >= parseFloat(slider.min) && newValue <= parseFloat(slider.max)) {
+                    updateHourlyWageSlider(newValue.toFixed(2));
                 }
             }
 
-            // Calculate total pay
-            var totalPay = standardPay + overtimePay;
+            function upHandler() {
+                document.removeEventListener('mousemove', moveHandler);
+                document.removeEventListener('mouseup', upHandler);
+            }
 
-            // Display calculated salary
-            document.getElementById('calculated-salary').innerHTML =
-                '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
-                '<p class="mt-2">Time and a half rate: ' + selectedCurrency + (hourlyWage * 1.5).toFixed(2) + '</p>' +
-                '<p class="mt-2">Standard hourly rate: ' + selectedCurrency + hourlyWage.toFixed(2) + '</p>' +
-                '<p class="mt-2">Time and a half pay: ' + selectedCurrency + overtimePay.toFixed(2) + '</p>' +
-                '<p class="mt-2">Standard pay: ' + selectedCurrency + standardPay.toFixed(2) + '</p>' +
-                '<p class="mt-2">Total money earned: ' + selectedCurrency + totalPay.toFixed(2) + '</p>';
-        }
+            document.addEventListener('mousemove', moveHandler);
+            document.addEventListener('mouseup', upHandler);
+        });
+
+        // Update hourly wage slider value
+        document.getElementById('hourly-wage-slider').addEventListener('input', function () {
+            document.getElementById('hourly-wage').textContent = this.value;
+        });
 
         document.addEventListener("DOMContentLoaded", function () {
             // Set default values
