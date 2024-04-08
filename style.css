@@ -226,3 +226,50 @@
 .hourly-pay input[type=range] {
     width: 100%;
 }
+
+.result-main {
+
+    width: 60%;
+    height: 50%;
+    border-radius: 10px;
+    box-shadow: 3px 3px 3px rgb(230, 230, 230);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 50px;
+    padding: 20px;
+    background-color: rgb(190, 190, 190);
+}
+
+.card-main {
+    display: flex;
+}
+
+.card1 {
+    border-radius: 10px;
+    box-shadow: 3px 2px 1px rgb(230, 230, 230);
+    width: 40%;
+    padding: 2%;
+    margin-top: 10px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    margin-top: 20px;
+}
+
+.card1 h1 {
+    font-size: 15px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.card1 p {
+    background-color: #000;
+    color: #fff;
+    width: 90px;
+    height: 30px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
