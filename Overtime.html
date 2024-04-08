@@ -17,6 +17,7 @@
 
 <body>
 
+    <!-- Navigation Links -->
     <div class="navbar">
         <ul class="nav-list">
             <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
@@ -27,8 +28,8 @@
     </div>
 
     <div class="calculator-main">
-        <div class="calculator-calculation-parent">
-            <div class="calculator-calculation-card">
+        <div class="calculator-calculation-parent1">
+            <div class="calculator-calculation-card2">
                 <h1>Overtime Calculator</h1>
                 <div class="grid-container">
                     <h2>Currency</h2>
@@ -39,30 +40,49 @@
                         <button onclick="handleCurrencyChange('₹')">₹</button>
                         <button onclick="handleCurrencyChange('¥')">¥</button>
                     </div>
+                    <h2>Pay rate choice:</h2>
+                    <div class="currency-selector">
+                        <button id="hourly" class="selected">Hourly</button>
+                        <button id="daily">Daily</button>
+                        <button id="weekly">Weekly</button>
+                        <button id="biweekly">Biweekly</button>
+                        <button id="monthly">Monthly</button>
+                        <button id="annual">Annual</button>
+                    </div>
                     <div class="input-group">
-                        <label for="hourly-wage">Hourly pay</label>
+                        <label for="hourly-wage">Hourly Rate</label>
                         <div class="hourly-pay">
                             <span id="selected-currency">$</span>
-                            <input type="range" id="hourly-wage-slider" min="0" max="100" value="0">
-                            <span id="hourly-wage">0</span>
+                            <input type="range" id="hourly-wage-slider" min="0" max="100" value="15"
+                                class="w-full bg-black-500" onchange="updateHourlyWage()" oninput="updateHourlyWage()">
+                            <span id="hourly-wage" class="ml-3">0</span>
                         </div>
                     </div>
                     <div class="input-main">
                         <div class="input-group">
-                            <label for="hours-per-week">Work hours per week</label>
-                            <input type="number" id="hours-per-week"
-                                class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                            <label for="hours-worked-overtime">Hours worked at overtime</label>
+                            <input type="number" id="hours-worked-overtime">
                         </div>
                         <div class="input-group">
-                            <label for="weeks-per-year">Work weeks per year</label>
-                            <input type="number" id="weeks-per-year"
-                                class="w-full p-2 mt-2 border border-gray-300 rounded-md">
+                            <label for="overtime-multiplier">Overtime multiplier</label>
+                            <div class="select-container">
+                                <select id="overtime-multiplier" class="custom-select"
+                                    onchange="updateOvertimeMultiplier()">
+                                    <option value="1.5">Time and a half</option>
+                                    <option value="2">Double Time</option>
+                                    <option value="3">Triple Time</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <input type="text" id="selected-overtime-multiplier" class="custom-input" value="1.5"
+                                    readonly>
+                            </div>
                         </div>
                     </div>
                     <div>
                         <button class="calculate-btn" onclick="calculateRates()">Calculate</button>
                     </div>
                 </div>
+                <div id="result" class="result"></div>
             </div>
         </div>
         <div class="flex-item">
@@ -87,64 +107,142 @@
                     and companies.</p>
             </div>
         </div>
-
-        <div class="popup" id="popup">
-            <div class="popup-content">
-                <p>Please fill in all required fields with valid numeric values.</p>
-                <button class="popup-button" id="close-popup">Close</button>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Wait for DOM content to load before executing scripts
+
+        const exchangeRates = {
+            '$': 1, '€': 0.85, '£': 0.75, '₹': 74.21, '¥': 114.41
+        };
+
+        function handleCurrencyChange(currency) {
+            document.getElementById('selected-currency').textContent = currency;
+        }
+
+        function handlePayRateChoice(choice) {
+            var hourlyPayLabel = document.querySelector('.input-group label');
+            if (hourlyPayLabel) {
+                hourlyPayLabel.textContent = choice === 'Hourly' ? 'Hourly pay rate:' : 'Standard ' + choice.toLowerCase() + ' pay rate:';
+                calculateRates();
+            }
+        }
+
+        function updateOvertimeMultiplier() {
+            var selectedOption = document.getElementById('overtime-multiplier').value;
+            if (selectedOption === "other") {
+                document.getElementById('selected-overtime-multiplier').readOnly = false;
+                document.getElementById('selected-overtime-multiplier').value = "";
+            } else {
+                document.getElementById('selected-overtime-multiplier').readOnly = true;
+                document.getElementById('selected-overtime-multiplier').value = selectedOption;
+            }
+        }
+
+        function calculateRates() {
+            var currency = document.getElementById('selected-currency').textContent;
+            var payRateChoice = document.querySelector('.currency-selector button.selected').textContent;
+            var standardPayRate = parseFloat(document.getElementById('hourly-wage-slider').value);
+            var hoursWorkedOvertime = parseFloat(document.getElementById('hours-worked-overtime').value) || 0;
+            var overtimeMultiplier = parseFloat(document.getElementById('selected-overtime-multiplier').value);
+            var standardHours = 0;
+            var standardPay = 0;
+
+            switch (payRateChoice) {
+                case 'Hourly':
+                    standardHours = 40;
+                    standardPay = standardPayRate * standardHours;
+                    break;
+                case 'Daily':
+                    standardHours = 8; // 8 hours per day
+                    standardPay = standardPayRate * standardHours * 5; // 5 days a week
+                    break;
+                case 'Weekly':
+                    standardHours = 40; // 40 hours per week
+                    standardPay = standardPayRate * standardHours;
+                    break;
+                case 'Biweekly':
+                    standardHours = 40; // 40 hours per week
+                    standardPay = standardPayRate * standardHours * 2; // 2 weeks
+                    break;
+                case 'Monthly':
+                    standardHours = 40 * 4; // 40 hours per week and 4 weeks in a month
+                    standardPay = standardPayRate * standardHours;
+                    break;
+                case 'Annual':
+                    standardHours = 40 * 52; // 40 hours per week and 52 weeks in a year
+                    standardPay = standardPayRate * standardHours;
+                    break;
+                default:
+                    break;
+            }
+
+            // Calculate the standard pay rate for overtime hours
+            var standardOvertimePay = standardPayRate * overtimeMultiplier * hoursWorkedOvertime;
+
+            // Calculate the formatted standard overtime pay
+            var formattedStandardOvertimePay = currency + standardOvertimePay.toFixed(2);
+
+            var overtimePayRate = standardPayRate * overtimeMultiplier;
+            var overtimePay = overtimePayRate * hoursWorkedOvertime;
+            var totalEarned = standardPay + overtimePay;
+
+            if (currency !== '$') {
+                standardPay /= exchangeRates[currency];
+                overtimePayRate /= exchangeRates[currency];
+                standardOvertimePay /= exchangeRates[currency];
+                overtimePay /= exchangeRates[currency];
+                totalEarned /= exchangeRates[currency];
+            }
+
+            var formattedStandardPayRate = currency + standardPayRate.toFixed(2);
+            var formattedOvertimePayRate = currency + overtimePayRate.toFixed(2);
+            var formattedOvertimePay = currency + overtimePay.toFixed(2);
+            var formattedStandardPay = currency + standardPay.toFixed(2);
+            var formattedTotalEarned = currency + totalEarned.toFixed(2);
+
+            var resultElement = document.getElementById('result');
+            resultElement.innerHTML = '<h2>Overtime pay calculation</h2>' +
+                '<p>Overtime pay rate: ' + formattedOvertimePayRate + '</p>' +
+                '<p>Standard pay rate: ' + formattedStandardPayRate + '</p>' +
+                '<p>Standard overtime pay: ' + formattedStandardOvertimePay + '</p>' +
+                '<p>Overtime pay: ' + formattedOvertimePay + '</p>' +
+                '<p>Standard pay: ' + formattedStandardPay + '</p>' +
+                '<p>Total money earned: ' + formattedTotalEarned + '</p>' +
+                '<h2>Pay type</h2>' +
+                '<table style="border-collapse: collapse; border: 1px solid black;">' +
+                '<tr><th style="border: 1px solid black;">Rate</th><th style="border: 1px solid black;">Hours</th><th style="border: 1px solid black;">Totals</th></tr>' +
+                '<tr><td style="border: 1px solid black;">Standard</td><td style="border: 1px solid black;">' + standardHours + '</td><td style="border: 1px solid black;">' + formattedStandardPay + '</td></tr>' +
+                '<tr><td style="border: 1px solid black;">Overtime</td><td style="border: 1px solid black;">' + hoursWorkedOvertime + '</td><td style="border: 1px solid black;">' + formattedOvertimePay + '</td></tr>' +
+                '<tr><td style="border: 1px solid black;">Total pay</td><td style="border: 1px solid black;">' + (standardHours + hoursWorkedOvertime) + '</td><td style="border: 1px solid black;">' + formattedTotalEarned + '</td></tr>' +
+                '</table>';
+
+            // Show the result section
+            resultElement.style.display = 'block';
+        }
+
+        function updateHourlyWage() {
+            document.getElementById('hourly-wage').textContent = document.getElementById('hourly-wage-slider').value;
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
-            // Function to handle currency change
-            function handleCurrencyChange(currency) {
-                var selectedCurrencyElement = document.getElementById('selected-currency');
-                selectedCurrencyElement.textContent = currency;
-                // Trigger the change event
-                selectedCurrencyElement.dispatchEvent(new Event('change'));
-            }
-
-            // Function to calculate salary
-            function calculateRates() {
-                // Get input values
-                var hourlyWage = parseFloat(document.getElementById('hourly-wage').textContent);
-                var hoursPerWeek = parseFloat(document.getElementById('hours-per-week').value);
-                var weeksPerYear = parseFloat(document.getElementById('weeks-per-year').value);
-
-                // Check if any input is empty or not a number
-                if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear)) {
-                    // Show popup
-                    document.getElementById('popup').style.display = 'flex';
-                } else {
-                    // Calculate salary
-                    var annualSalary = hourlyWage * hoursPerWeek * weeksPerYear;
-                    var monthlySalary = annualSalary / 12;
-                    var weeklyPay = annualSalary / 52;
-
-                    // Display calculated salary
-                    alert('Annual Salary: $' + annualSalary.toFixed(2) + '\nMonthly Salary: $' + monthlySalary.toFixed(2) + '\nWeekly Pay: $' + weeklyPay.toFixed(2));
-                }
-            }
-
-            // Close popup
-            document.getElementById('close-popup').addEventListener('click', function () {
-                document.getElementById('popup').style.display = 'none';
+            handleCurrencyChange('$');
+            handlePayRateChoice('Hourly');
+            var payRateButtons = document.querySelectorAll('.currency-selector button');
+            payRateButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // Update the selected button class
+                    payRateButtons.forEach(function (btn) {
+                        btn.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    // Call handlePayRateChoice with the selected button's id
+                    handlePayRateChoice(this.id);
+                });
             });
-
-            // Handle currency change event
-            document.getElementById('selected-currency').addEventListener('change', function () {
-                var selectedCurrency = this.textContent;
-                // You can define exchange rates here if needed
-            });
-
-            // Update hourly wage slider value
-            document.getElementById('hourly-wage-slider').addEventListener('input', function () {
-                document.getElementById('hourly-wage').textContent = this.value;
-            });
+            // Hide the result section initially
+            document.getElementById('result').style.display = 'none';
         });
+
     </script>
 
 </body>
