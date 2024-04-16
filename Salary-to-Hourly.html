@@ -99,25 +99,9 @@
             </div>
         </div> -->
     </div>
-    <div id="calculated-salary" class="result-main">
-        <h1>Calculation Result :</h1>
-        <div class="card-main">
-            <div class="card1">
-                <h1>Hourly Pay :</h1>
-                <p>15$</p>
-            </div>
-            <div class="card1">
-                <h1>Monthly Pay:</h1>
-                <p>15$</p>
-            </div>
-        </div>
-        <div class="card1">
-            <h1>Per Week:</h1>
-            <p>15$</p>
-        </div>
-    </div>
-
+    <div id="calculated-salary"></div>
     <script>
+
         // Global variable to store the current pay rate choice
         let currentPayRateChoice = 'Annual';
 
@@ -130,10 +114,8 @@
             '¥': { rate: 114.41, medianSalary: 4000000 } // Placeholder median salary for Japanese Yen
         };
 
-        // Function to handle currency change
         function handleCurrencyChange(currency) {
-            var selectedCurrencyElement = document.getElementById('selected-currency');
-            selectedCurrencyElement.textContent = currency;
+            document.getElementById('selected-currency').textContent = currency;
         }
 
         // Function to handle pay rate choice
@@ -180,11 +162,14 @@
                     daily = (annualSalary / 365) / hoursPerWeek;
                 }
 
-                document.getElementById('calculated-salary').innerHTML = '<h2>Results:</h2>' +
-                    '<p>Hourly Pay: ' + currency + ' ' + hourly.toFixed(2) + '</p>' +
-                    '<p>Monthly Pay (avg): ' + currency + ' ' + monthly.toFixed(2) + '</p>' +
-                    '<p>Per Week: ' + currency + ' ' + weekly.toFixed(2) + '</p>' +
-                    '<p>% of US median salary: ' + ((annualSalary / exchangeRates['$'].medianSalary) * 100).toFixed(1) + '%</p>';
+                document.getElementById('calculated-salary').innerHTML =
+                    '<div style="background-color: #ccc; padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px;">' +
+                    '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Results:</h2>' +
+                    '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Hourly Pay: <span style="font-weight: bold; color: #000;">' + currency + ' ' + hourly.toFixed(2) + '</span></p>' +
+                    '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Monthly Pay (avg): <span style="font-weight: bold; color: #000;">' + currency + ' ' + monthly.toFixed(2) + '</span></p>' +
+                    '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Per Week: <span style="font-weight: bold; color: #000;">' + currency + ' ' + weekly.toFixed(2) + '</span></p>' +
+                    '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">% of US median salary: <span style="font-weight: bold; color: #000;">' + ((annualSalary / exchangeRates['$'].medianSalary) * 100).toFixed(1) + '%</span></p>' +
+                    '</div>';
             } else {
                 document.getElementById('calculated-salary').innerHTML = "Please enter valid values for salary, hours per week, and weeks per year.";
             }
@@ -211,3 +196,26 @@
 </body>
 
 </html>
+
+
+
+
+<!-- <h1>Calculation Result :</h1>
+        <div class="card-main">
+            <div class="card1" id="hourly-pay">
+                <h1>Hourly Pay :</h1>
+                <p></p>
+            </div>
+            <div class="card1" id="monthly-pay">
+                <h1>Monthly Pay:</h1>
+                <p></p>
+            </div>
+        </div>
+        <div class="card1" id="per-week">
+            <h1>Per Week:</h1>
+            <p></p>
+        </div>
+        <div class="card1" id="median-salary">
+            <h1>% of median salary:</h1>
+            <p></p>
+        </div> -->
