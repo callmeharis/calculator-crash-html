@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Finance Calculator</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +15,7 @@
 </head>
 
 <body>
-    <!-- Navigation Links -->
+
     <div class="navbar">
         <ul class="nav-list">
             <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
@@ -87,82 +86,74 @@
             </div>
         </div>
 
-        <!-- <div class="popup" id="popup">
-            <div class="popup-content">
-                <p>Please fill in all required fields with valid numeric values.</p>
-                <button class="popup-button" id="close-popup">Close</button>
-            </div>
-        </div> -->
+
     </div>
-    <div id="median-salary"></div> <!-- Added this line -->
+    <div id="median-salary"></div>
     <div id="calculated-salary"></div>
 </body>
 <script>
-    // Define exchange rates globally
+
     const exchangeRates = {
-        '$': 1, // USD is the base currency
-        '€': 0.85, // Euro to USD exchange rate
-        '£': 0.75, // British Pound to USD exchange rate
-        '₹': 74.21, // Indian Rupee to USD exchange rate
-        '¥': 114.41 // Japanese Yen to USD exchange rate
+        '$': 1,
+        '€': 0.85,
+        '£': 0.75,
+        '₹': 74.21,
+        '¥': 114.41
     };
 
-    // Function to display median salary information
+
     function displayMedianSalary(country, medianSalary, currency) {
         document.getElementById('median-salary').innerHTML =
             '<h2 class="text-xl font-semibold">Median Salary</h2>' +
             '<p class="mt-2">Median salary in ' + country + ': ' + currency + medianSalary.toFixed(2) + '</p>';
     }
 
-    // Function to handle currency change
+
     function handleCurrencyChange(currency) {
         var selectedCurrencyElement = document.getElementById('selected-currency');
         selectedCurrencyElement.textContent = currency;
 
-        // Display median salaries and update exchange rate
+
         switch (currency) {
             case '$':
                 displayMedianSalary('US', 57200, currency);
                 break;
             case '€':
-                displayMedianSalary('UK', 33000, currency); // Median salary for EUR
+                displayMedianSalary('UK', 33000, currency);
                 break;
             case '£':
-                displayMedianSalary('UK', 33000, currency); // Median salary for GBP
+                displayMedianSalary('UK', 33000, currency);
                 break;
             case '₹':
-                displayMedianSalary('India', 500000, currency); // Median salary for INR
+                displayMedianSalary('India', 500000, currency);
                 break;
             case '¥':
-                displayMedianSalary('Japan', 4000000, currency); // Median salary for JPY
+                displayMedianSalary('Japan', 4000000, currency);
                 break;
             default:
                 break;
         }
 
-        // Trigger the change event
+
         selectedCurrencyElement.dispatchEvent(new Event('change'));
     }
 
-    // Function to calculate salary
+
     function calculateRates() {
-        // Get input values
         var hourlyWage = parseFloat(document.getElementById('hourly-wage').textContent);
         var hoursPerWeek = parseFloat(document.getElementById('hours-per-week').value);
         var weeksPerYear = parseFloat(document.getElementById('weeks-per-year').value);
         var selectedCurrency = document.getElementById('selected-currency').textContent;
 
-        // Check if any input is empty or not a number
+
         if (isNaN(hourlyWage) || isNaN(hoursPerWeek) || isNaN(weeksPerYear)) {
-            // Show popup
             document.getElementById('popup').style.display = 'flex';
         } else {
-            // Calculate salary based on the selected currency
             var annualSalary = hourlyWage * hoursPerWeek * weeksPerYear * exchangeRates[selectedCurrency];
             var monthlySalary = annualSalary / 12;
             var weeklyPay = annualSalary / 52;
 
-            // Display calculated salary
+
             document.getElementById('calculated-salary').innerHTML =
                 '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
                 '<p class="mt-2">Annual Salary: ' + selectedCurrency + annualSalary.toFixed(2) + '</p>' +
@@ -171,12 +162,12 @@
         }
     }
 
-    // Close popup
+
     document.getElementById('close-popup').addEventListener('click', function () {
         document.getElementById('popup').style.display = 'none';
     });
 
-    // Handle currency change event
+
     document.getElementById('selected-currency').addEventListener('change', function () {
     });
 
@@ -187,7 +178,7 @@
     }
 
 
-    // Update hourly wage slider value
+
     document.getElementById('hourly-wage-slider').addEventListener('input', function () {
         document.getElementById('hourly-wage').textContent = this.value;
     });

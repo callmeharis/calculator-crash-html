@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Finance Calculator</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +15,7 @@
 </head>
 
 <body>
-    <!-- Navigation Links -->
+
     <div class="navbar">
         <ul class="nav-list">
             <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
@@ -90,35 +89,27 @@
                 <p class="info-paragraph">The hourly wage calculator is perfect for personal use, accounting services
                     and companies.</p>
             </div>
-        </div>
 
-        <!-- <div class="popup" id="popup">
-            <div class="popup-content">
-                <p>Please fill in all required fields with valid numeric values.</p>
-                <button class="popup-button" id="close-popup">Close</button>
-            </div>
-        </div> -->
+        </div>
     </div>
     <div id="calculated-salary"></div>
     <script>
 
-        // Global variable to store the current pay rate choice
-        let currentPayRateChoice = 'Annual';
 
-        // Provided exchange rates
+        let currentPayRateChoice = 'Annual';
         const exchangeRates = {
-            '$': { rate: 1, medianSalary: 56800 }, // USD is the base currency
-            '€': { rate: 0.85, medianSalary: 48767 }, // Placeholder median salary for Euro
-            '£': { rate: 0.75, medianSalary: 43000 }, // Placeholder median salary for Pound Sterling
-            '₹': { rate: 74.21, medianSalary: 905000 }, // Placeholder median salary for Indian Rupee
-            '¥': { rate: 114.41, medianSalary: 4000000 } // Placeholder median salary for Japanese Yen
+            '$': { rate: 1, medianSalary: 56800 },
+            '€': { rate: 0.85, medianSalary: 48767 },
+            '£': { rate: 0.75, medianSalary: 43000 },
+            '₹': { rate: 74.21, medianSalary: 905000 },
+            '¥': { rate: 114.41, medianSalary: 4000000 }
         };
 
         function handleCurrencyChange(currency) {
             document.getElementById('selected-currency').textContent = currency;
         }
 
-        // Function to handle pay rate choice
+
         function handlePayRateChoice(choice) {
             var hourlyPayLabel = document.querySelector('.input-group label');
             if (hourlyPayLabel) {
@@ -128,7 +119,6 @@
                     hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay:';
                 }
             }
-            // Update the global variable with the current pay rate choice
             currentPayRateChoice = choice;
         }
 
@@ -182,11 +172,9 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Set default values
             handleCurrencyChange('$');
             handlePayRateChoice('Annual');
 
-            // Close popup
             document.getElementById('close-popup').addEventListener('click', function () {
                 document.getElementById('popup').style.display = 'none';
             });
@@ -196,26 +184,3 @@
 </body>
 
 </html>
-
-
-
-
-<!-- <h1>Calculation Result :</h1>
-        <div class="card-main">
-            <div class="card1" id="hourly-pay">
-                <h1>Hourly Pay :</h1>
-                <p></p>
-            </div>
-            <div class="card1" id="monthly-pay">
-                <h1>Monthly Pay:</h1>
-                <p></p>
-            </div>
-        </div>
-        <div class="card1" id="per-week">
-            <h1>Per Week:</h1>
-            <p></p>
-        </div>
-        <div class="card1" id="median-salary">
-            <h1>% of median salary:</h1>
-            <p></p>
-        </div> -->

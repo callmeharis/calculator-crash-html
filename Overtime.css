@@ -1,41 +1,33 @@
 Navbar container .navbar {
     background-color: #000000;
-    /* Navbar background color */
     padding: 10px 20px;
-    /* Add padding for spacing */
 }
 
-/* Navigation list */
+
 .nav-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    /* Align items horizontally */
+
 }
 
-/* List items */
 .nav-list li {
     margin-right: 20px;
-    /* Add spacing between list items */
+
 }
 
-/* Links */
 .nav-list li a {
     text-decoration: none;
     color: #fff;
-    /* Link color */
     font-size: 16px;
-    /* Font size */
     transition: color 0.3s ease;
-    /* Add transition for smooth color change */
 }
 
-/* Hover effect */
+
 .nav-list li a:hover {
     color: #ccc;
-    /* Change color on hover */
 }
 
 .heading {

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Finance Calculator</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +16,6 @@
 
 <body>
 
-    <!-- Navigation Links -->
     <div class="navbar">
         <ul class="nav-list">
             <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
@@ -153,33 +151,30 @@
                     standardPay = standardPayRate * standardHours;
                     break;
                 case 'Daily':
-                    standardHours = 8; // 8 hours per day
-                    standardPay = standardPayRate * standardHours * 5; // 5 days a week
+                    standardHours = 8;
+                    standardPay = standardPayRate * standardHours * 5;
                     break;
                 case 'Weekly':
-                    standardHours = 40; // 40 hours per week
+                    standardHours = 40;
                     standardPay = standardPayRate * standardHours;
                     break;
                 case 'Biweekly':
-                    standardHours = 40; // 40 hours per week
-                    standardPay = standardPayRate * standardHours * 2; // 2 weeks
+                    standardHours = 40;
+                    standardPay = standardPayRate * standardHours * 2;
                     break;
                 case 'Monthly':
-                    standardHours = 40 * 4; // 40 hours per week and 4 weeks in a month
+                    standardHours = 40 * 4;
                     standardPay = standardPayRate * standardHours;
                     break;
                 case 'Annual':
-                    standardHours = 40 * 52; // 40 hours per week and 52 weeks in a year
+                    standardHours = 40 * 52;
                     standardPay = standardPayRate * standardHours;
                     break;
                 default:
                     break;
             }
 
-            // Calculate the standard pay rate for overtime hours
             var standardOvertimePay = standardPayRate * overtimeMultiplier * hoursWorkedOvertime;
-
-            // Calculate the formatted standard overtime pay
             var formattedStandardOvertimePay = currency + standardOvertimePay.toFixed(2);
 
             var overtimePayRate = standardPayRate * overtimeMultiplier;
@@ -216,7 +211,6 @@
                 '<tr><td style="border: 1px solid black;">Total pay</td><td style="border: 1px solid black;">' + (standardHours + hoursWorkedOvertime) + '</td><td style="border: 1px solid black;">' + formattedTotalEarned + '</td></tr>' +
                 '</table>';
 
-            // Show the result section
             resultElement.style.display = 'block';
         }
 
@@ -230,16 +224,13 @@
             var payRateButtons = document.querySelectorAll('.currency-selector button');
             payRateButtons.forEach(function (button) {
                 button.addEventListener('click', function () {
-                    // Update the selected button class
                     payRateButtons.forEach(function (btn) {
                         btn.classList.remove('selected');
                     });
                     this.classList.add('selected');
-                    // Call handlePayRateChoice with the selected button's id
                     handlePayRateChoice(this.id);
                 });
             });
-            // Hide the result section initially
             document.getElementById('result').style.display = 'none';
         });
 
