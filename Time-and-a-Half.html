@@ -136,7 +136,7 @@
                 }
             }
             // Update the global variable with the selected pay rate choice
-            currentPayRateChoice = choice;
+            payRateChoice = choice;
         }
 
         function calculateRates() {
@@ -237,9 +237,33 @@
 
             // Event listener for calculate button
             document.querySelector('.calculate-btn').addEventListener('click', calculateRates);
+
+            // Event listeners for pay rate choices
+            document.getElementById('hourly').addEventListener('click', function () {
+                handlePayRateChoice('Hourly');
+            });
+
+            document.getElementById('daily').addEventListener('click', function () {
+                handlePayRateChoice('Daily');
+            });
+
+            document.getElementById('weekly').addEventListener('click', function () {
+                handlePayRateChoice('Weekly');
+            });
+
+            document.getElementById('biweekly').addEventListener('click', function () {
+                handlePayRateChoice('Biweekly');
+            });
+
+            document.getElementById('monthly').addEventListener('click', function () {
+                handlePayRateChoice('Monthly');
+            });
+
+            document.getElementById('annual').addEventListener('click', function () {
+                handlePayRateChoice('Annual');
+            });
         });
     </script>
-
 </body>
 
 </html>
