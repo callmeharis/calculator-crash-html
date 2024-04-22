@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Finance Calculator</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +16,7 @@
 </head>
 
 <body>
-
+    <!-- Navigation Links -->
     <div class="navbar">
         <ul class="nav-list">
             <li><a href="Hourly-to-Salary.html" onclick="showHourlyToSalary()">Hourly to Salary Calculator</a></li>
@@ -39,7 +40,7 @@
                         <button onclick="handleCurrencyChange('¥')">¥</button>
                     </div>
                     <h2>Pay rate choice:</h2>
-                    <div class="currency-selector">
+                    <div class="pay-rate-selector currency-selector">
                         <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
                         <button onclick="handlePayRateChoice('Daily')">Daily</button>
                         <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
@@ -73,7 +74,7 @@
                             <div id="calculated-salary"></div>
                         </div>
                     </div>
-
+                    <!-- Result display div -->
                     <div id="result"></div>
                 </div>
             </div>
@@ -100,26 +101,35 @@
             </div>
         </div>
 
+        <!-- <div class="popup" id="popup">
+            <div class="popup-content">
+                <p>Please fill in all required fields with valid numeric values.</p>
+                <button class="popup-button" id="close-popup">Close</button>
+            </div>
+        </div> -->
     </div>
 
     <script>
         const exchangeRates = {
-            '$': 1,
-            '€': 0.85,
-            '£': 0.75,
-            '₹': 74.21,
-            '¥': 114.41
-        }
-
+            '$': 1, '€': 0.85, '£': 0.75, '₹': 74.21, '¥': 114.41
+        };
 
         let payRateChoice = 'Hourly';
 
         function handleCurrencyChange(currency) {
+            document.querySelectorAll('.currency-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
             document.getElementById('selected-currency').textContent = currency;
         }
 
-
         function handlePayRateChoice(choice) {
+            document.querySelectorAll('.pay-rate-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+
             var hourlyPayLabel = document.querySelector('.input-group label');
             if (hourlyPayLabel) {
                 if (choice === 'Hourly') {
@@ -128,8 +138,7 @@
                     hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
                 }
             }
-
-            currentPayRateChoice = choice;
+            payRateChoice = choice;
         }
 
         function calculateRates() {
@@ -163,18 +172,19 @@
             var timeAndHalfPay = hoursAtTimeAndHalf * timeAndHalfRate;
             var totalEarned = (standardPayRate * standardHoursWorked) + timeAndHalfPay;
 
+            // Apply exchange rate if currency is not USD
             if (currency !== '$') {
                 timeAndHalfRate /= exchangeRates[currency];
                 timeAndHalfPay /= exchangeRates[currency];
                 totalEarned /= exchangeRates[currency];
             }
 
-            cy
+            // Format results with selected currency
             var formattedTimeAndHalfRate = currency + timeAndHalfRate.toFixed(2);
             var formattedTimeAndHalfPay = currency + timeAndHalfPay.toFixed(2);
             var formattedTotalEarned = currency + totalEarned.toFixed(2);
 
-
+            // Update result display
             var resultElement = document.getElementById('result');
             resultElement.innerHTML = '<h2>Results:</h2>' +
                 '<p>Time and a Half Rate: ' + formattedTimeAndHalfRate + '</p>' +
@@ -182,55 +192,59 @@
                 '<p>Total Money Earned: ' + formattedTotalEarned + '</p>';
         }
 
-
+        // Function to update hourly wage slider value
         function updateHourlyWageSlider(value) {
             document.getElementById('hourly-wage-slider').value = value;
             document.getElementById('hourly-wage').textContent = value;
         }
 
-
-        document.getElementById('hourly-wage').addEventListener('mousedown', function (e) {
-            var slider = document.getElementById('hourly-wage-slider');
-            var startX = e.clientX;
-            var startValue = parseFloat(slider.value);
-
-            function moveHandler(e) {
-                var deltaX = e.clientX - startX;
-                var newValue = startValue + deltaX * (slider.max - slider.min) / slider.offsetWidth;
-                if (newValue >= parseFloat(slider.min) && newValue <= parseFloat(slider.max)) {
-                    updateHourlyWageSlider(newValue.toFixed(2));
-                }
-            }
-
-            function upHandler() {
-                document.removeEventListener('mousemove', moveHandler);
-                document.removeEventListener('mouseup', upHandler);
-            }
-
-            document.addEventListener('mousemove', moveHandler);
-            document.addEventListener('mouseup', upHandler);
-        });
-
+        function updateHourlyWage() {
+            document.getElementById('hourly-wage').textContent = document.getElementById('hourly-wage-slider').value;
+        }
 
         document.getElementById('hourly-wage-slider').addEventListener('input', function () {
             document.getElementById('hourly-wage').textContent = this.value;
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-
+            // Set default values
             handleCurrencyChange('$');
             handlePayRateChoice('Hourly');
 
-
+            // Close popup
             document.getElementById('close-popup').addEventListener('click', function () {
                 document.getElementById('popup').style.display = 'none';
             });
 
-
+            // Event listener for calculate button
             document.querySelector('.calculate-btn').addEventListener('click', calculateRates);
+
+            // Event listeners for pay rate choices
+            document.getElementById('hourly').addEventListener('click', function () {
+                handlePayRateChoice('Hourly');
+            });
+
+            document.getElementById('daily').addEventListener('click', function () {
+                handlePayRateChoice('Daily');
+            });
+
+            document.getElementById('weekly').addEventListener('click', function () {
+                handlePayRateChoice('Weekly');
+            });
+
+            document.getElementById('biweekly').addEventListener('click', function () {
+                handlePayRateChoice('Biweekly');
+            });
+
+            document.getElementById('monthly').addEventListener('click', function () {
+                handlePayRateChoice('Monthly');
+            });
+
+            document.getElementById('annual').addEventListener('click', function () {
+                handlePayRateChoice('Annual');
+            });
         });
     </script>
-
 </body>
 
 </html>

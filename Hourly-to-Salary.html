@@ -112,32 +112,11 @@
 
 
     function handleCurrencyChange(currency) {
-        var selectedCurrencyElement = document.getElementById('selected-currency');
-        selectedCurrencyElement.textContent = currency;
-
-
-        switch (currency) {
-            case '$':
-                displayMedianSalary('US', 57200, currency);
-                break;
-            case '€':
-                displayMedianSalary('UK', 33000, currency);
-                break;
-            case '£':
-                displayMedianSalary('UK', 33000, currency);
-                break;
-            case '₹':
-                displayMedianSalary('India', 500000, currency);
-                break;
-            case '¥':
-                displayMedianSalary('Japan', 4000000, currency);
-                break;
-            default:
-                break;
-        }
-
-
-        selectedCurrencyElement.dispatchEvent(new Event('change'));
+        document.querySelectorAll('.currency-selector button').forEach(button => {
+            button.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
+        document.getElementById('selected-currency').textContent = currency;
     }
 
 

@@ -39,12 +39,13 @@
                         <button onclick="handleCurrencyChange('¥')">¥</button>
                     </div>
                     <h2>Pay rate choice:</h2>
-                    <div class="currency-selector">
-                        <button onclick="handlePayRateChoice('Annual')" class="selected">Annual</button>
-                        <button onclick="handlePayRateChoice('Monthly')">Monthly</button>
-                        <button onclick="handlePayRateChoice('Biweekly')">Biweekly</button>
-                        <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
+                    <div class="pay-rate-selector currency-selector">
+                        <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
                         <button onclick="handlePayRateChoice('Daily')">Daily</button>
+                        <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
+                        <button onclick="handlePayRateChoice('Biweekly')">Biweekly</button>
+                        <button onclick="handlePayRateChoice('Monthly')">Monthly</button>
+                        <button onclick="handlePayRateChoice('Annual')">Annual</button>
                     </div>
                     <div class="input-group">
                         <label for="hourly-wage">Salary: </label>
@@ -105,21 +106,31 @@
             '¥': { rate: 114.41, medianSalary: 4000000 }
         };
 
+        let payRateChoice = 'Annual';
+
         function handleCurrencyChange(currency) {
+            document.querySelectorAll('.currency-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
             document.getElementById('selected-currency').textContent = currency;
         }
 
-
         function handlePayRateChoice(choice) {
+            document.querySelectorAll('.pay-rate-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+
             var hourlyPayLabel = document.querySelector('.input-group label');
             if (hourlyPayLabel) {
                 if (choice === 'Annual') {
-                    hourlyPayLabel.textContent = 'Salary:';
+                    hourlyPayLabel.textContent = 'Annual Salary:';
                 } else {
                     hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay:';
                 }
             }
-            currentPayRateChoice = choice;
+            payRateChoice = choice;
         }
 
         const calculateRates = () => {
