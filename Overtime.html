@@ -196,7 +196,9 @@
             var formattedTotalEarned = currency + totalEarned.toFixed(2);
 
             var resultElement = document.getElementById('result');
-            resultElement.innerHTML = '<h2>Overtime pay calculation</h2>' +
+            resultElement.innerHTML =
+                '<div>'
+            '<h2>Overtime pay calculation</h2>' +
                 '<p>Overtime pay rate: ' + formattedOvertimePayRate + '</p>' +
                 '<p>Standard pay rate: ' + formattedStandardPayRate + '</p>' +
                 '<p>Standard overtime pay: ' + formattedStandardOvertimePay + '</p>' +
