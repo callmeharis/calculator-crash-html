@@ -40,7 +40,7 @@
                         <button onclick="handleCurrencyChange('¥')">¥</button>
                     </div>
                     <h2>Pay rate choice:</h2>
-                    <div class="currency-selector">
+                    <div class="pay-rate-selector currency-selector">
                         <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
                         <button onclick="handlePayRateChoice('Daily')">Daily</button>
                         <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
@@ -111,22 +111,25 @@
 
     <script>
         const exchangeRates = {
-            '$': 1, // USD is the base currency
-            '€': 0.85, // Euro to USD exchange rate
-            '£': 0.75, // British Pound to USD exchange rate
-            '₹': 74.21, // Indian Rupee to USD exchange rate
-            '¥': 114.41 // Japanese Yen to USD exchange rate
-        }
+            '$': 1, '€': 0.85, '£': 0.75, '₹': 74.21, '¥': 114.41
+        };
 
-        // Define global variable to store pay rate choice
         let payRateChoice = 'Hourly';
 
         function handleCurrencyChange(currency) {
+            document.querySelectorAll('.currency-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
             document.getElementById('selected-currency').textContent = currency;
         }
 
-        // Function to handle pay rate choice
         function handlePayRateChoice(choice) {
+            document.querySelectorAll('.pay-rate-selector button').forEach(button => {
+                button.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+
             var hourlyPayLabel = document.querySelector('.input-group label');
             if (hourlyPayLabel) {
                 if (choice === 'Hourly') {
@@ -135,7 +138,6 @@
                     hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
                 }
             }
-            // Update the global variable with the selected pay rate choice
             payRateChoice = choice;
         }
 
@@ -146,7 +148,6 @@
             var standardHoursWorked = parseFloat(document.getElementById('standardHoursWorked').value) || 0;
             var timeAndHalfRate = 0;
 
-            // Calculate time and a half rate based on pay rate choice
             switch (payRateChoice) {
                 case 'Hourly':
                     timeAndHalfRate = standardPayRate * 1.5;
@@ -197,30 +198,10 @@
             document.getElementById('hourly-wage').textContent = value;
         }
 
-        // Event listener for mousedown on hourly wage element
-        document.getElementById('hourly-wage').addEventListener('mousedown', function (e) {
-            var slider = document.getElementById('hourly-wage-slider');
-            var startX = e.clientX;
-            var startValue = parseFloat(slider.value);
+        function updateHourlyWage() {
+            document.getElementById('hourly-wage').textContent = document.getElementById('hourly-wage-slider').value;
+        }
 
-            function moveHandler(e) {
-                var deltaX = e.clientX - startX;
-                var newValue = startValue + deltaX * (slider.max - slider.min) / slider.offsetWidth;
-                if (newValue >= parseFloat(slider.min) && newValue <= parseFloat(slider.max)) {
-                    updateHourlyWageSlider(newValue.toFixed(2));
-                }
-            }
-
-            function upHandler() {
-                document.removeEventListener('mousemove', moveHandler);
-                document.removeEventListener('mouseup', upHandler);
-            }
-
-            document.addEventListener('mousemove', moveHandler);
-            document.addEventListener('mouseup', upHandler);
-        });
-
-        // Update hourly wage slider value
         document.getElementById('hourly-wage-slider').addEventListener('input', function () {
             document.getElementById('hourly-wage').textContent = this.value;
         });

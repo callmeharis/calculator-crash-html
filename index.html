@@ -109,33 +109,31 @@
     }
 
 
+    let payRateChoice = 'Hourly';
+
     function handleCurrencyChange(currency) {
-        var selectedCurrencyElement = document.getElementById('selected-currency');
-        selectedCurrencyElement.textContent = currency;
+        document.querySelectorAll('.currency-selector button').forEach(button => {
+            button.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
+        document.getElementById('selected-currency').textContent = currency;
+    }
 
+    function handlePayRateChoice(choice) {
+        document.querySelectorAll('.pay-rate-selector button').forEach(button => {
+            button.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
 
-        switch (currency) {
-            case '$':
-                displayMedianSalary('US', 57200, currency);
-                break;
-            case '€':
-                displayMedianSalary('UK', 33000, currency);
-                break;
-            case '£':
-                displayMedianSalary('UK', 33000, currency);
-                break;
-            case '₹':
-                displayMedianSalary('India', 500000, currency);
-                break;
-            case '¥':
-                displayMedianSalary('Japan', 4000000, currency);
-                break;
-            default:
-                break;
+        var hourlyPayLabel = document.querySelector('.input-group label');
+        if (hourlyPayLabel) {
+            if (choice === 'Hourly') {
+                hourlyPayLabel.textContent = 'Hourly pay rate:';
+            } else {
+                hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
+            }
         }
-
-
-        selectedCurrencyElement.dispatchEvent(new Event('change'));
+        payRateChoice = choice;
     }
 
 
