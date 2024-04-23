@@ -32,11 +32,11 @@
                 <div class="grid-container">
                     <h2>Currency</h2>
                     <div class="currency-selector">
-                        <button onclick="handleCurrencyChange('$')" class="selected">$</button>
-                        <button onclick="handleCurrencyChange('€')">€</button>
-                        <button onclick="handleCurrencyChange('£')">£</button>
-                        <button onclick="handleCurrencyChange('₹')">₹</button>
-                        <button onclick="handleCurrencyChange('¥')">¥</button>
+                        <button onclick="handleCurrencyChange(event, '$')" class="selected">$</button>
+                        <button onclick="handleCurrencyChange(event, '€')">€</button>
+                        <button onclick="handleCurrencyChange(event, '£')">£</button>
+                        <button onclick="handleCurrencyChange(event, '₹')">₹</button>
+                        <button onclick="handleCurrencyChange(event, '¥')">¥</button>
                     </div>
                     <div class="input-group">
                         <label for="hourly-wage">Hourly pay</label>
@@ -110,15 +110,39 @@
             '</div>';
     }
 
+    function handleCurrencyChange(event, currency) {
+        const target = event.target;
+        if (target) {
+            const buttons = document.querySelectorAll('.currency-selector button');
+            buttons.forEach(button => {
+                button.classList.remove('selected');
+            });
+            target.classList.add('selected');
+        }
 
-    function handleCurrencyChange(currency) {
-        document.querySelectorAll('.currency-selector button').forEach(button => {
-            button.classList.remove('selected');
-        });
-        event.target.classList.add('selected');
-        document.getElementById('selected-currency').textContent = currency;
+        const selectedCurrencyElement = document.getElementById('selected-currency');
+        selectedCurrencyElement.textContent = currency;
+
+        switch (currency) {
+            case '$':
+                displayMedianSalary('US', 57200, currency);
+                break;
+            case '€':
+            case '£':
+                displayMedianSalary('UK', 33000, currency);
+                break;
+            case '₹':
+                displayMedianSalary('India', 500000, currency);
+                break;
+            case '¥':
+                displayMedianSalary('Japan', 4000000, currency);
+                break;
+            default:
+                break;
+        }
+
+        selectedCurrencyElement.dispatchEvent(new Event('change'));
     }
-
 
     function calculateRates() {
 
@@ -139,20 +163,14 @@
 
 
             document.getElementById('calculated-salary').innerHTML =
-                '<div style=" background-color: rgb(229 231 235); padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px; margin-bottom:40px; margin-top:40px;">' +
+                '<div style=" background-color: rgb(229 231 235); padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px; margin-bottom:40px; margin-top:80px;">' +
                 '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Results:</h2>' +
-                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Annual Salary: <span style="font-weight: bold; color: #000; margin-left:px;">' + selectedCurrency + annualSalary.toFixed(2) + '</span> </p>' +
-                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Monthly Salary: <span style="font-weight: bold; color: #000;">' + selectedCurrency + monthlySalary.toFixed(2) + '</span> </p>' +
-                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Weekly Pay: <span style="font-weight: bold; color: #000;">' + selectedCurrency + weeklyPay.toFixed(2) + '</span> </p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Annual Salary: <span style="font-weight: bold; color: #000; margin-left:5px;">' + selectedCurrency + annualSalary.toFixed(2) + '</span> </p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Monthly Salary: <span style="font-weight: bold; color: #000; margin-left:5px;">' + selectedCurrency + monthlySalary.toFixed(2) + '</span> </p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Weekly Pay: <span style="font-weight: bold; color: #000; margin-left:5px;">' + selectedCurrency + weeklyPay.toFixed(2) + '</span> </p>' +
                 '</div>';
         }
     }
-
-
-    document.getElementById('close-popup').addEventListener('click', function () {
-        document.getElementById('popup').style.display = 'none';
-    });
-
 
     document.getElementById('selected-currency').addEventListener('change', function () {
     });
