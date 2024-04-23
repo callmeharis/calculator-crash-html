@@ -153,10 +153,12 @@
 
 
             document.getElementById('calculated-salary').innerHTML =
-                '<h2 class="text-xl font-semibold">Calculated Salary</h2>' +
-                '<p class="mt-2">Annual Salary: ' + selectedCurrency + annualSalary.toFixed(2) + '</p>' +
-                '<p>Monthly Salary: ' + selectedCurrency + monthlySalary.toFixed(2) + '</p>' +
-                '<p>Weekly Pay: ' + selectedCurrency + weeklyPay.toFixed(2) + '</p>';
+                '<div style=" background-color: rgb(229 231 235); padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px; margin-bottom:40px; margin-top:40px;">' +
+                '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Calculated Salary</h2>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Annual Salary: <span style="font-weight: bold; color: #000; margin-left:px;">' + selectedCurrency + annualSalary.toFixed(2) + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Monthly Salary: <span style="font-weight: bold; color: #000; margin-left:px;">' + selectedCurrency + monthlySalary.toFixed(2) + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Weekly Pay:<span style="font-weight: bold; color: #000; margin-left:px;"> ' + selectedCurrency + weeklyPay.toFixed(2) + '</span></p>' +
+                '</div>';
         }
     }
 
