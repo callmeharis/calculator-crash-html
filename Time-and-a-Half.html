@@ -33,20 +33,20 @@
                 <div class="grid-container">
                     <h2>Currency</h2>
                     <div class="currency-selector">
-                        <button onclick="handleCurrencyChange('$')" class="selected">$</button>
-                        <button onclick="handleCurrencyChange('€')">€</button>
-                        <button onclick="handleCurrencyChange('£')">£</button>
-                        <button onclick="handleCurrencyChange('₹')">₹</button>
-                        <button onclick="handleCurrencyChange('¥')">¥</button>
+                        <button onclick="handleCurrencyChange(event, '$')" class="selected">$</button>
+                        <button onclick="handleCurrencyChange(event, '€')">€</button>
+                        <button onclick="handleCurrencyChange(event, '£')">£</button>
+                        <button onclick="handleCurrencyChange(event, '₹')">₹</button>
+                        <button onclick="handleCurrencyChange(event, '¥')">¥</button>
                     </div>
                     <h2>Pay rate choice:</h2>
                     <div class="pay-rate-selector currency-selector">
-                        <button onclick="handlePayRateChoice('Hourly')" class="selected">Hourly</button>
-                        <button onclick="handlePayRateChoice('Daily')">Daily</button>
-                        <button onclick="handlePayRateChoice('Weekly')">Weekly</button>
-                        <button onclick="handlePayRateChoice('Biweekly')">Biweekly</button>
-                        <button onclick="handlePayRateChoice('Monthly')">Monthly</button>
-                        <button onclick="handlePayRateChoice('Annual')">Annual</button>
+                        <button onclick="handlePayRateChoice(event, 'Hourly')" class="selected">Hourly</button>
+                        <button onclick="handlePayRateChoice(event, 'Daily')">Daily</button>
+                        <button onclick="handlePayRateChoice(event, 'Weekly')">Weekly</button>
+                        <button onclick="handlePayRateChoice(event, 'Biweekly')">Biweekly</button>
+                        <button onclick="handlePayRateChoice(event, 'Monthly')">Monthly</button>
+                        <button onclick="handlePayRateChoice(event, 'Annual')">Annual</button>
                     </div>
                     <div class="input-group">
                         <label for="hourly-wage">Hourly pay</label>
@@ -100,45 +100,48 @@
                     and companies.</p>
             </div>
         </div>
-
-        <!-- <div class="popup" id="popup">
-            <div class="popup-content">
-                <p>Please fill in all required fields with valid numeric values.</p>
-                <button class="popup-button" id="close-popup">Close</button>
-            </div>
-        </div> -->
     </div>
+
 
     <script>
         const exchangeRates = {
             '$': 1, '€': 0.85, '£': 0.75, '₹': 74.21, '¥': 114.41
         };
 
+        let selectedCurrency = '$';
         let payRateChoice = 'Hourly';
 
-        function handleCurrencyChange(currency) {
-            document.querySelectorAll('.currency-selector button').forEach(button => {
-                button.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
-            document.getElementById('selected-currency').textContent = currency;
+        function handleCurrencyChange(event, currency) {
+            if (event && event.target) {
+                const target = event.target;
+                const buttons = document.querySelectorAll('.currency-selector button');
+                buttons.forEach(button => {
+                    button.classList.remove('selected');
+                });
+                target.classList.add('selected');
+                document.getElementById('selected-currency').textContent = currency;
+            }
         }
 
-        function handlePayRateChoice(choice) {
-            document.querySelectorAll('.pay-rate-selector button').forEach(button => {
-                button.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
+        function handlePayRateChoice(event, choice) {
+            if (event && event.target) {
+                const target = event.target;
+                const buttons = document.querySelectorAll('.pay-rate-selector button');
+                buttons.forEach(button => {
+                    button.classList.remove('selected');
+                });
+                target.classList.add('selected');
 
-            var hourlyPayLabel = document.querySelector('.input-group label');
-            if (hourlyPayLabel) {
-                if (choice === 'Hourly') {
-                    hourlyPayLabel.textContent = 'Hourly pay rate:';
-                } else {
-                    hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
+                const hourlyPayLabel = document.querySelector('.input-group label');
+                if (hourlyPayLabel) {
+                    if (choice === 'Hourly') {
+                        hourlyPayLabel.textContent = 'Hourly pay rate:';
+                    } else {
+                        hourlyPayLabel.textContent = 'Standard ' + choice.toLowerCase() + ' pay rate:';
+                    }
                 }
+                payRateChoice = choice;
             }
-            payRateChoice = choice;
         }
 
         function calculateRates() {
@@ -186,62 +189,55 @@
 
             // Update result display
             var resultElement = document.getElementById('result');
-            resultElement.innerHTML = '<h2>Results:</h2>' +
-                '<p>Time and a Half Rate: ' + formattedTimeAndHalfRate + '</p>' +
-                '<p>Time and a Half Pay: ' + formattedTimeAndHalfPay + '</p>' +
-                '<p>Total Money Earned: ' + formattedTotalEarned + '</p>';
+            resultElement.innerHTML =
+                '<div style="background-color: rgb(229 231 235); padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px; margin-bottom:80px; margin-top:80px; ">' +
+                '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Results:</h2>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Time and a Half Rate: <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedTimeAndHalfRate + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Time and a Half Pay: <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedTimeAndHalfPay + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px;">Total Money Earned: <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedTotalEarned + '</span></p>';
         }
 
-        // Function to update hourly wage slider value
         function updateHourlyWageSlider(value) {
-            document.getElementById('hourly-wage-slider').value = value;
-            document.getElementById('hourly-wage').textContent = value;
+            const hourlyWageSlider = document.getElementById('hourly-wage-slider');
+            const hourlyWageText = document.getElementById('hourly-wage');
+
+            if (hourlyWageSlider && hourlyWageText) {
+                hourlyWageSlider.value = value;
+                hourlyWageText.textContent = value;
+            }
         }
 
         function updateHourlyWage() {
-            document.getElementById('hourly-wage').textContent = document.getElementById('hourly-wage-slider').value;
+            const hourlyWageSlider = document.getElementById('hourly-wage-slider');
+            const hourlyWageText = document.getElementById('hourly-wage');
+
+            if (hourlyWageSlider && hourlyWageText) {
+                hourlyWageText.textContent = hourlyWageSlider.value;
+            }
         }
 
-        document.getElementById('hourly-wage-slider').addEventListener('input', function () {
-            document.getElementById('hourly-wage').textContent = this.value;
+        const hourlyWageSlider = document.getElementById('hourly-wage-slider');
+        if (hourlyWageSlider) {
+            hourlyWageSlider.addEventListener('input', updateHourlyWage);
+        }
+
+        // Set default values
+        handleCurrencyChange('$');
+        handlePayRateChoice('Hourly');
+
+        // Event listeners for pay rate choice buttons
+        const payRateButtons = document.querySelectorAll('.pay-rate-selector button');
+        payRateButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                handlePayRateChoice(button.getAttribute('data-value'));
+            });
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Set default values
-            handleCurrencyChange('$');
-            handlePayRateChoice('Hourly');
-
-            // Close popup
-            document.getElementById('close-popup').addEventListener('click', function () {
-                document.getElementById('popup').style.display = 'none';
-            });
-
-            // Event listener for calculate button
-            document.querySelector('.calculate-btn').addEventListener('click', calculateRates);
-
-            // Event listeners for pay rate choices
-            document.getElementById('hourly').addEventListener('click', function () {
-                handlePayRateChoice('Hourly');
-            });
-
-            document.getElementById('daily').addEventListener('click', function () {
-                handlePayRateChoice('Daily');
-            });
-
-            document.getElementById('weekly').addEventListener('click', function () {
-                handlePayRateChoice('Weekly');
-            });
-
-            document.getElementById('biweekly').addEventListener('click', function () {
-                handlePayRateChoice('Biweekly');
-            });
-
-            document.getElementById('monthly').addEventListener('click', function () {
-                handlePayRateChoice('Monthly');
-            });
-
-            document.getElementById('annual').addEventListener('click', function () {
-                handlePayRateChoice('Annual');
+        // Event listener for currency selector buttons
+        const currencyButtons = document.querySelectorAll('.currency-selector button');
+        currencyButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                handleCurrencyChange(button.getAttribute('data-currency'));
             });
         });
     </script>

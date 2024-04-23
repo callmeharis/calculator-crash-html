@@ -190,6 +190,21 @@
     margin: 10px 0;
 }
 
+.select-container {
+    display: flex;
+    margin-top: 5px;
+}
+
+.custom-input {
+    margin-left: 10px;
+}
+
+.custom-select {
+    border-radius: 5px;
+    border: none;
+    border: 1px solid rgb(209 213 219);
+}
+
 .input-group label {
     font-size: 12px;
     font-weight: 500;
