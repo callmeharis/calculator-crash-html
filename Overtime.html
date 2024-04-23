@@ -220,21 +220,22 @@
 
             var resultElement = document.getElementById('result');
             resultElement.innerHTML =
-                '<div>' +
-                '<h2>Overtime pay calculation</h2>' +
-                '<p>Overtime pay rate: ' + formattedOvertimePayRate + '</p>' +
-                '<p>Standard pay rate: ' + formattedStandardPayRate + '</p>' +
-                '<p>Standard overtime pay: ' + formattedStandardOvertimePay + '</p>' +
-                '<p>Overtime pay: ' + formattedOvertimePay + '</p>' +
-                '<p>Standard pay: ' + formattedStandardPay + '</p>' +
-                '<p>Total money earned: ' + formattedTotalEarned + '</p>' +
-                '<h2>Pay type</h2>' +
-                '<table style="border-collapse: collapse; border: 1px solid black;">' +
-                '<tr><th style="border: 1px solid black;">Rate</th><th style="border: 1px solid black;">Hours</th><th style="border: 1px solid black;">Totals</th></tr>' +
-                '<tr><td style="border: 1px solid black;">Standard</td><td style="border: 1px solid black;">' + standardHours + '</td><td style="border: 1px solid black;">' + formattedStandardPay + '</td></tr>' +
-                '<tr><td style="border: 1px solid black;">Overtime</td><td style="border: 1px solid black;">' + hoursWorkedOvertime + '</td><td style="border: 1px solid black;">' + formattedOvertimePay + '</td></tr>' +
-                '<tr><td style="border: 1px solid black;">Total pay</td><td style="border: 1px solid black;">' + (standardHours + hoursWorkedOvertime) + '</td><td style="border: 1px solid black;">' + formattedTotalEarned + '</td></tr>' +
-                '</table>';
+                '<div style="background-color: rgb(229 231 235); padding: 10px; max-width: 500px; margin: 0 auto; border-radius: 10px; margin-bottom:80px; margin-top:40px; ">' +
+                '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Results:</h2>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Overtime pay rate:  <span style="font-weight: bold; color: #000; margin-left:5px;"> ' + formattedOvertimePayRate + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Standard pay rate:  <span style="font-weight: bold; color: #000; margin-left:5px;"> ' + formattedStandardPayRate + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Standard overtime pay:  <span style="font-weight: bold; color: #000; ">' + formattedStandardOvertimePay + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Overtime pay:  <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedOvertimePay + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Standard pay:  <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedStandardPay + '</span></p>' +
+                '<p style="font-size: 1.2em; color: #666; background-color: white; padding: 10px; margin: 5px; border-radius: 5px; ">Total money earned:  <span style="font-weight: bold; color: #000; margin-left:5px;">' + formattedTotalEarned + '</span></p>' +
+                '<h2 style="font-size: 1.5em; color: #333; padding: 10px;">Pay type:</h2>' +
+                '<table style="border-collapse: collapse; border: 1px solid black;  margin-left: 5px; margin-top:10px; margin-bottom:5px;">' +
+                '<tr><th style="border: 1px solid black;  background-color: white;">Rate</th><th style="border: 1px solid black; background-color: white; width:100px;">Hours</th><th style="border: 1px solid black; background-color: white;">Totals</th></tr>' +
+                '<tr><td style="border: 1px solid black; width:120px; background-color: white;">Standard</td><td style="border: 1px solid black; width:50px; background-color: white;">' + standardHours + '</td><td style="border: 1px solid black; width:120px; background-color: white;">' + formattedStandardPay + '</td></tr>' +
+                '<tr><td style="border: 1px solid black; width:120px; background-color: white;">Overtime</td><td style="border: 1px solid black; width:50px; background-color: white;">' + hoursWorkedOvertime + '</td><td style="border: 1px solid black; width:120px; background-color: white;">' + formattedOvertimePay + '</td></tr>' +
+                '<tr><td style="border: 1px solid black; width:120px; background-color: white;">Total pay</td><td style="border: 1px solid black; width:50px; background-color: white;">' + (standardHours + hoursWorkedOvertime) + '</td><td style="border: 1px solid black; background-color: white;">' + formattedTotalEarned + '</td></tr>' +
+                '</table>' +
+                '</div>';
 
             resultElement.style.display = 'block';
         }
